@@ -42,7 +42,7 @@ var CONFIG = {
    Paste the /exec web-app URL you get from Google Apps Script here.
    Full instructions are in SETUP-ORDERS.txt.
    Until you paste it, orders fall back to opening WhatsApp.            */
-var ORDER_ENDPOINT = "https://script.google.com/macros/s/AKfycbybg02MOQH6RMUF97YHugR5AZIWrvsxXAZWUZ78JePrSYpJQeDfFezWFVSyeLHfnwk/exec";
+var ORDER_ENDPOINT = "https://script.google.com/macros/s/AKfycbyTIL94u2JnN-NSOwHT7BiF6NhXP6cnqMn7HJtp9k959KVdy-r-ZZdBhffAAQQENg/exec";
 
 /* ============ 3) EDIT HERE ▸ FAQ (what the chat assistant knows) ====
    q = the question shown as a tappable chip

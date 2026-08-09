@@ -60,19 +60,19 @@
     <div class="shead reveal">
       <div><span class="eyebrow">Pick your universe</span><h2>Shop by fandom</h2>
       <p>We don't pick one niche — your fandom is the niche. Tap in, or bring us something no one else makes.</p></div>
-      <a href="#drops" class="btn btn-ghost btn-sm">All products</a>
+      <a href="shop.html" class="btn btn-ghost btn-sm">All products</a>
     </div>
     <!-- EDIT HERE ▸ FANDOM TILES -->
     <div class="tiles reveal">
-      <div class="tile t-anime"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Anime</h3><span class="cnt">Katanas, stands &amp; figures · 40+</span></div>
-      <div class="tile t-hp"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Harry Potter</h3><span class="cnt">Wands &amp; props · 12+</span></div>
-      <div class="tile t-marvel"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Marvel &amp; DC</h3><span class="cnt">Busts, masks &amp; stands</span></div>
-      <div class="tile t-starwars"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Star Wars</h3><span class="cnt">Helmets, busts &amp; props</span></div>
-      <div class="tile t-movies"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Movies &amp; TV</h3><span class="cnt">Squid Game, Stranger Things &amp; more</span></div>
-      <div class="tile t-game"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Gaming</h3><span class="cnt">Pokéball, God of War &amp; more</span></div>
-      <div class="tile t-scifi"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Sci-Fi &amp; Space</h3><span class="cnt">Project Hail Mary · collectibles</span></div>
-      <div class="tile t-ami"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Amigurumi</h3><span class="cnt">Cute knit-look figures</span></div>
-      <div class="tile t-bd"><div class="flag"></div><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Bangladesh Special</h3><span class="cnt">Festive &amp; local picks</span></div>
+      <div class="tile t-anime" data-fandom="Anime"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Anime</h3><span class="cnt">Katanas, stands &amp; figures · 40+</span></div>
+      <div class="tile t-hp" data-fandom="Harry Potter"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Harry Potter</h3><span class="cnt">Wands &amp; props · 12+</span></div>
+      <div class="tile t-marvel" data-fandom="Marvel &amp; DC"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Marvel &amp; DC</h3><span class="cnt">Busts, masks &amp; stands</span></div>
+      <div class="tile t-starwars" data-fandom="Star Wars"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Star Wars</h3><span class="cnt">Helmets, busts &amp; props</span></div>
+      <div class="tile t-movies" data-fandom="Movies &amp; TV"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Movies &amp; TV</h3><span class="cnt">Squid Game, Stranger Things &amp; more</span></div>
+      <div class="tile t-game" data-fandom="Gaming"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Gaming</h3><span class="cnt">Pokéball, God of War &amp; more</span></div>
+      <div class="tile t-scifi" data-fandom="Sci-Fi"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Sci-Fi &amp; Space</h3><span class="cnt">Project Hail Mary · collectibles</span></div>
+      <div class="tile t-ami" data-fandom="Amigurumi"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Amigurumi</h3><span class="cnt">Cute knit-look figures</span></div>
+      <div class="tile t-bd" data-fandom="Bangladesh"><div class="flag"></div><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Bangladesh Special</h3><span class="cnt">Festive &amp; local picks</span></div>
       <div class="tile t-custom" onclick="location.href='custom.html'"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div><h3>Something else?</h3><span class="cnt">→ We'll 3D print it for you</span></div>
     </div>
 
@@ -94,7 +94,10 @@
 <section class="sec band-tint" id="drops" style="padding-top:0">
   <div class="wrap">
     <div class="shead reveal">
-      <div><span class="eyebrow">Fresh off the printer</span><h2>Featured drops</h2></div>
+      <div><span class="eyebrow">Fresh off the printer</span>
+      <h2 id="dropsTitle">All <span class="y">products</span></h2>
+      <div class="filterhead"><span class="cnt" id="dropsCount"></span>
+        <button class="clearfilter" id="clearFilter" type="button" style="display:none">&times; Clear filter — show everything</button></div></div>
       <a href="custom.html" class="btn btn-ghost btn-sm">Can't find it? Ask us</a>
     </div>
     <div class="grid reveal" id="grid"></div>

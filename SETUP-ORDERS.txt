@@ -1,0 +1,125 @@
+==========================================================
+ CONNECT YOUR ORDER FORM TO A GOOGLE SHEET
+ (about 10 minutes, one time only)
+==========================================================
+
+Right now the checkout page works, but until you finish these
+steps it falls back to opening WhatsApp so no order is ever
+lost. Once you finish, every order lands in a spreadsheet
+automatically and you get an email too.
+
+
+----------------------------------------------------------
+ STEP 1 — Make the spreadsheet
+----------------------------------------------------------
+1. Go to  sheets.new  (signed in with the Gmail you want to
+   own the orders — jontormontor.official@gmail.com is a good
+   choice).
+2. Rename it at the top left to:  Jontor Montor Orders
+3. Leave it empty. The script builds the column headers itself
+   the first time an order comes in.
+
+
+----------------------------------------------------------
+ STEP 2 — Add the script
+----------------------------------------------------------
+4. In that spreadsheet, click  Extensions  ▸  Apps Script.
+5. A code editor opens with a file called Code.gs containing
+   a few lines like "function myFunction() {}".
+   Select ALL of it and delete it.
+6. Open the file  google-apps-script.gs  (in this folder) with
+   Notepad / TextEdit, copy EVERYTHING, and paste it in.
+7. Near the top you'll see:
+
+      var NOTIFY_EMAIL = "jontormontor.official@gmail.com";
+
+   Change it if you want the "new order" alerts to go somewhere
+   else. Put "" (empty quotes) if you don't want emails at all.
+8. Click the floppy-disk Save icon.
+
+
+----------------------------------------------------------
+ STEP 3 — Publish it
+----------------------------------------------------------
+9.  Top right, click  Deploy  ▸  New deployment.
+10. Click the gear icon next to "Select type" and choose
+    **Web app**.
+11. Fill in:
+       Description:      Order inbox
+       Execute as:       Me (your email)
+       Who has access:   **Anyone**        <-- IMPORTANT
+    "Anyone" does NOT mean people can see your sheet. It only
+    means your website is allowed to send orders in. Nobody can
+    read anything back.
+12. Click  Deploy.
+13. Google asks for permission the first time:
+       - Click "Authorize access"
+       - Pick your Google account
+       - You'll see "Google hasn't verified this app" — this is
+         normal, it's your own script. Click **Advanced**, then
+         **Go to Jontor Montor Orders (unsafe)**, then **Allow**.
+14. You now get a **Web app URL** ending in  /exec
+    It looks like:
+       https://script.google.com/macros/s/AKfycb................/exec
+    Click **Copy**.
+
+
+----------------------------------------------------------
+ STEP 4 — Paste it into your website
+----------------------------------------------------------
+15. In your GitHub repo, open  js/app.js
+16. Press the pencil icon to edit. Near the top, find:
+
+       var ORDER_ENDPOINT = "";
+
+17. Paste your URL between the quotes so it reads:
+
+       var ORDER_ENDPOINT = "https://script.google.com/macros/s/AKfycb..../exec";
+
+18. Scroll down, click **Commit changes**.
+19. Cloudflare Pages redeploys on its own — takes about a minute.
+
+
+----------------------------------------------------------
+ STEP 5 — Test it
+----------------------------------------------------------
+20. Open your live site, add anything to the cart, go to
+    Checkout, fill it in with your own name and phone, and
+    place the order.
+21. Check the spreadsheet — a row should appear within seconds,
+    and an email should land in your inbox.
+22. Delete that test row.
+
+If nothing appears: open the /exec URL directly in a browser.
+You should see  {"ok":true,"message":"..."}  — if you instead
+get a login page, go back to Step 11 and make sure "Who has
+access" is set to **Anyone**, then Deploy ▸ New deployment
+again (editing an existing deployment does not always
+re-publish).
+
+
+----------------------------------------------------------
+ EVERY TIME YOU CHANGE THE SCRIPT LATER
+----------------------------------------------------------
+Apps Script does NOT publish your edits automatically.
+After editing, always do:
+   Deploy ▸ Manage deployments ▸ pencil icon ▸
+   Version: "New version" ▸ Deploy
+
+
+----------------------------------------------------------
+ WHAT YOU'LL SEE IN THE SHEET
+----------------------------------------------------------
+Placed at · Order ID · Status · Name · Phone · Alt phone ·
+Email · Address · Area/Thana · District · Zone · Payment ·
+Sender number · Transaction ID · Items · Item count ·
+Subtotal · Delivery · Total · Notes · Source
+
+The Status column starts as "NEW" — change it by hand to
+CONFIRMED / PRINTING / SHIPPED / DONE as you work through
+orders. Add your own columns to the right if you want; the
+script only ever writes to the ones above.
+
+TIP: In the sheet, click File ▸ Notification settings ▸
+"Notify me when any changes are made" to get a phone
+notification for each new order.

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Jontor Montor</title>
+<meta name="description" content="Complete your order — delivery details and payment. Cash on delivery, bKash or Nagad, delivered anywhere in Bangladesh.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/jpeg" href="images/logo.jpg">
+<meta name="theme-color" content="#0a3a1c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Space+Grotesk:wght@400;500;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section class="subhero dots-bg" style="padding-bottom:12px">
+  <div class="wrap">
+    <span class="eyebrow">Step 2 of 2 · almost there</span>
+    <h1>Check<span class="y">out</span></h1>
+    <p>Fill this in and we've got everything we need — no messaging required. We'll confirm your delivery date by phone or WhatsApp, usually within a few hours.</p>
+  </div>
+</section>
+
+<section class="page band-white">
+  <div class="wrap" id="coMain">
+    <div class="cogrid" id="coForm">
+
+      <!-- LEFT: details -->
+      <div class="cocol">
+
+        <div class="cobox">
+          <h3 class="cobox__t"><span class="conum">1</span> Delivery details</h3>
+          <div class="form">
+            <div class="form__row">
+              <div class="field"><label>Full name <span class="req">*</span></label>
+                <input id="co-name" autocomplete="name" placeholder="e.g. Ishrak Hossain"></div>
+              <div class="field"><label>Phone / WhatsApp <span class="req">*</span></label>
+                <input id="co-phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX"></div>
+            </div>
+            <div class="form__row">
+              <div class="field"><label>Alternate phone</label>
+                <input id="co-alt" type="tel" inputmode="numeric" placeholder="optional"></div>
+              <div class="field"><label>Email</label>
+                <input id="co-email" type="email" autocomplete="email" placeholder="optional — for the receipt"></div>
+            </div>
+            <div class="field"><label>Full address <span class="req">*</span></label>
+              <textarea id="co-address" autocomplete="street-address" placeholder="House / road / flat, landmark — everything the courier needs"></textarea></div>
+            <div class="form__row">
+              <div class="field"><label>Area / Thana <span class="req">*</span></label>
+                <input id="co-area" placeholder="e.g. Dhanmondi"></div>
+              <div class="field"><label>District <span class="req">*</span></label>
+                <input id="co-district" placeholder="e.g. Dhaka"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cobox">
+          <h3 class="cobox__t"><span class="conum">2</span> Delivery area</h3>
+          <div class="zonerow">
+            <label class="zoneopt"><input type="radio" name="zone" value="Inside Dhaka" checked>
+              <span><b>Inside Dhaka</b><i>1–3 days · <span id="feeDhaka">80৳</span></i></span></label>
+            <label class="zoneopt"><input type="radio" name="zone" value="Outside Dhaka">
+              <span><b>Outside Dhaka</b><i>Courier · <span id="feeOutside">130৳</span></i></span></label>
+          </div>
+        </div>
+
+        <div class="cobox">
+          <h3 class="cobox__t"><span class="conum">3</span> Payment method</h3>
+          <div class="payopts" id="payOpts">
+
+            <label class="payopt" data-pay="Cash on delivery">
+              <input type="radio" name="pay" value="Cash on delivery" checked>
+              <span class="payopt__in"><b>Cash on delivery</b><i>Pay the courier when it arrives</i></span>
+            </label>
+
+            <label class="payopt" data-pay="bKash">
+              <input type="radio" name="pay" value="bKash">
+              <span class="payopt__in"><b>bKash</b><i>Send Money, then paste the Transaction ID</i></span>
+            </label>
+
+            <label class="payopt" data-pay="Nagad">
+              <input type="radio" name="pay" value="Nagad">
+              <span class="payopt__in"><b>Nagad</b><i>Send Money, then paste the Transaction ID</i></span>
+            </label>
+          </div>
+
+          <div class="paybox" id="bkashBox" style="display:none">
+            <div class="paybox__head">bKash — <b>Send Money</b></div>
+            <div class="paynum"><span>Send to</span><b id="bkashNum">01601333064</b></div>
+            <ol class="paysteps">
+              <li>Open bKash → <b>Send Money</b> (not Payment).</li>
+              <li>Send <b id="payAmount">0৳</b> to the number above.</li>
+              <li>Copy the <b>Transaction ID</b> from the confirmation SMS.</li>
+              <li>Paste it below and place your order.</li>
+            </ol>
+          </div>
+
+          <div class="paybox" id="nagadBox" style="display:none">
+            <div class="paybox__head">Nagad — <b>Send Money</b></div>
+            <div class="paynum"><span>Send to</span><b id="nagadNum">01601333064</b></div>
+            <ol class="paysteps">
+              <li>Open Nagad → <b>Send Money</b>.</li>
+              <li>Send the order total to the number above.</li>
+              <li>Copy the <b>Transaction ID</b> from the confirmation SMS.</li>
+              <li>Paste it below and place your order.</li>
+            </ol>
+          </div>
+
+          <div id="trxBlock" style="display:none">
+            <div class="form form__row" style="margin-top:14px">
+              <div class="field"><label>Your bKash / Nagad number <span class="req">*</span></label>
+                <input id="co-sender" type="tel" inputmode="numeric" placeholder="the number you sent from"></div>
+              <div class="field"><label>Transaction ID <span class="req">*</span></label>
+                <input id="co-trx" placeholder="e.g. 9F7A2K1LMN"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cobox">
+          <h3 class="cobox__t"><span class="conum">4</span> Anything else?</h3>
+          <div class="form">
+            <div class="field"><label>Order notes</label>
+              <textarea id="co-notes" placeholder="Colour preference, gift wrapping, delivery timing, a size change — tell us here."></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: summary -->
+      <aside class="cocol">
+        <div class="cobox cosum">
+          <h3 class="cobox__t">Your order</h3>
+          <div id="coItems"></div>
+          <div class="cototals">
+            <div><span>Subtotal</span><b id="coSub">0৳</b></div>
+            <div><span>Delivery</span><b id="coDel">0৳</b></div>
+            <div class="grand"><span>Total</span><b id="coTot">0৳</b></div>
+          </div>
+          <button class="btn btn-gold" id="coPlace" type="button" style="width:100%;justify-content:center;margin-top:16px">
+            Place order
+          </button>
+          <p class="drawer__note" style="text-align:left;margin-top:10px">
+            By placing the order you agree we can contact you on the number above to confirm delivery.
+            Made-to-order pieces get a lead time confirmed after ordering.
+          </p>
+          <a class="btn btn-ghost btn-sm" href="shop.html" style="width:100%;justify-content:center;margin-top:6px">Add more items</a>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<a class="wa" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="WhatsApp us">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 01-1.9-1.2 7.2 7.2 0 01-1.3-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1s.2-1 .2-1.1-.2-.2-.4-.3z"/></svg>
+</a>
+<script src="js/app.js"></script>
+</body>
+</html>

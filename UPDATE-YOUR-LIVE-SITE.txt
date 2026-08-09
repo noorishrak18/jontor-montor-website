@@ -1,0 +1,90 @@
+==========================================================
+ HOW TO PUSH THIS UPDATE TO YOUR LIVE SITE
+ Repo: jintor-montor-website   ·   Host: Cloudflare Pages
+==========================================================
+
+You do NOT need to rebuild or redeploy anything. Cloudflare
+watches your GitHub repo — the moment you commit, it rebuilds
+your site automatically (about 60 seconds).
+
+You are replacing 3 files and adding 4 new ones. Nothing gets
+deleted. Your images, index.html, about.html, contact.html and
+custom.html are all untouched.
+
+
+----------------------------------------------------------
+ FILES TO REPLACE (overwrite the old ones)
+----------------------------------------------------------
+   js/app.js          <- all the fixes live here
+   css/styles.css     <- new styles for the product page + checkout
+   shop.html          <- fandom tiles now carry their category
+
+----------------------------------------------------------
+ FILES TO ADD (brand new)
+----------------------------------------------------------
+   checkout.html            <- the new order page
+   SETUP-ORDERS.txt         <- read this next
+   google-apps-script.gs    <- paste into Google Apps Script
+   UPDATE-YOUR-LIVE-SITE.txt  (this file)
+
+
+----------------------------------------------------------
+ THE EASIEST WAY (drag and drop, no Git knowledge needed)
+----------------------------------------------------------
+1. Go to  github.com  and open your  jintor-montor-website  repo.
+2. Click  **Add file**  ▸  **Upload files**.
+3. Drag in from this folder:
+        checkout.html
+        shop.html
+        SETUP-ORDERS.txt
+        google-apps-script.gs
+        UPDATE-YOUR-LIVE-SITE.txt
+   GitHub will overwrite shop.html and add the rest. That's fine.
+4. In the "Commit changes" box at the bottom, type:
+        Add checkout, product pages and fandom filtering
+5. Click  **Commit changes**.
+
+6. Now the two files that live in sub-folders. Click into the
+   **js** folder in your repo, then Add file ▸ Upload files, and
+   drag in  app.js  from this folder's  js  folder. Commit.
+
+7. Click into the **css** folder, Add file ▸ Upload files, drag
+   in  styles.css  from this folder's  css  folder. Commit.
+
+   (You have to do these two separately because GitHub's uploader
+   puts files wherever you are standing in the repo.)
+
+8. Wait about a minute. Open your  .pages.dev  address and press
+   Ctrl+Shift+R (Cmd+Shift+R on Mac) to force a fresh load.
+
+
+----------------------------------------------------------
+ IMPORTANT — DO THIS RIGHT AFTER
+----------------------------------------------------------
+Open  SETUP-ORDERS.txt  and follow it. Until you do, the
+checkout page still works but it hands the finished order to
+WhatsApp instead of writing it to a spreadsheet. Ten minutes
+and you're done with that forever.
+
+
+----------------------------------------------------------
+ IF SOMETHING LOOKS BROKEN AFTER THE UPDATE
+----------------------------------------------------------
+Nine times out of ten it's your browser holding onto the old
+CSS or JavaScript. Hard-refresh with Ctrl+Shift+R first, or
+open the site in a private/incognito window.
+
+If it's genuinely broken, GitHub keeps every version:
+   Repo ▸ the file ▸ History ▸ pick the previous version ▸
+   the "..." menu ▸ Revert. Cloudflare redeploys the old one.
+
+
+----------------------------------------------------------
+ ABOUT YOUR DOMAIN
+----------------------------------------------------------
+Everything works fine on the free .pages.dev address. When you
+do buy a domain, remember there is still a find-and-replace to
+do: every page has  https://www.jontormontor.com  baked into
+its SEO tags, plus robots.txt and sitemap.xml. Search for that
+address and swap in your real one, then add the domain under
+Cloudflare Pages ▸ your project ▸ Custom domains.

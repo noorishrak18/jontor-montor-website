@@ -1,0 +1,96 @@
+<!-- ==================================================================
+  JONTOR MONTOR — SECTION TEMPLATES (copy–paste library)
+  ===================================================================
+  This file is NOT part of the live site. It's a parts box.
+  To add a new section (e.g. "Gaming corner", more decor, a new
+  service): copy a block below, paste it into shop.html or index.html
+  where you want it, and change the marked text.
+
+  BACKGROUND RHYTHM — every section gets ONE band class:
+     band-white  = bright card             band-tint = soft green
+     band-deep   = dark forest (dramatic)
+  Tip: alternate them as you go down the page (white → tint → white →
+  deep → white …) so the scroll never feels flat.
+=================================================================== -->
+
+
+<!-- ──────────────────────────────────────────────────────────────
+  TEMPLATE 1 · PRODUCT ROW  (like "Room decor" / a future "Gaming corner")
+  Two steps:
+  A) Paste this section into shop.html (pick your band class):
+─────────────────────────────────────────────────────────────── -->
+<section class="sec band-white" id="gaming">                 <!-- change id -->
+  <div class="wrap">
+    <div class="shead reveal">
+      <div><span class="eyebrow">Level up your desk</span>   <!-- small top label -->
+      <h2>Gaming <span class="y">corner</span></h2>          <!-- section title -->
+      <p>One line describing what's in this section.</p></div>
+      <a href="custom.html" class="btn btn-ghost btn-sm">Want a specific piece?</a>
+    </div>
+    <div class="grid reveal" id="gamingrow"></div>           <!-- change id to match step B -->
+  </div>
+</section>
+<!--
+  B) In js/app.js:
+     1. Add a list near the other EDIT HERE lists:
+          var GAMING = [
+           {name:"Item name", sub:"small grey line", tag:"label on photo",
+            badge:"stock", now:"999", was:"1299", img:"images/your-photo.jpg"},
+          ];
+     2. Inside renderCatalog(), under the other fill(...) lines, add:
+          fill("gamingrow",GAMING.map(pcard).join(""));
+     Done — cards render with working Add-to-cart automatically.
+-->
+
+
+<!-- ──────────────────────────────────────────────────────────────
+  TEMPLATE 2 · TEXT + 3 INFO CARDS  (services, guarantees, how-tos)
+─────────────────────────────────────────────────────────────── -->
+<section class="sec band-tint" id="my-section">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div><span class="eyebrow">Small label</span><h2>Section title</h2>
+      <p>One or two lines of intro text.</p></div>
+    </div>
+    <div class="cards3 reveal">
+      <div class="icard"><h4>Card one</h4><p>Short description.</p></div>
+      <div class="icard"><h4>Card two</h4><p>Short description.</p></div>
+      <div class="icard"><h4>Card three</h4><p>Short description.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ──────────────────────────────────────────────────────────────
+  TEMPLATE 3 · DARK STATEMENT BAND  (announcements, big claims)
+─────────────────────────────────────────────────────────────── -->
+<section class="sec band-deep dots-bg" id="statement">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div><span class="eyebrow">Small label</span>
+      <h2>A bold line with a <span class="y">gold highlight</span></h2>
+      <p>Supporting sentence — text is auto-styled light on this band.</p></div>
+      <a href="custom.html" class="btn btn-gold btn-sm">Call to action</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ──────────────────────────────────────────────────────────────
+  TEMPLATE 4 · A NEW FANDOM/CATEGORY TILE  (goes inside the
+  <div class="tiles"> grid in shop.html)
+  Available color classes: t-anime t-hp t-marvel t-dc t-starwars
+  t-movies t-game t-scifi t-ami t-bd t-custom
+─────────────────────────────────────────────────────────────── -->
+<div class="tile t-game"><div class="arr"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div>
+  <h3>New category</h3><span class="cnt">Short description · count</span></div>
+
+
+<!-- ──────────────────────────────────────────────────────────────
+  TEMPLATE 5 · FAQ ENTRY for the chat assistant (js/app.js → FAQ)
+─────────────────────────────────────────────────────────────── -->
+<!--
+ {q:"Question shown as a chip?",
+  k:["keyword1","keyword2","phrase people type"],
+  a:"The answer.\nUse \n for a new line."},
+-->

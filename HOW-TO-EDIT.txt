@@ -1,0 +1,124 @@
+======================================================================
+ JONTOR MONTOR — HOW TO EDIT YOUR WEBSITE
+======================================================================
+
+Your whole site is plain text files. You can edit them in any code
+editor (Notepad works, but VS Code — free — is nicer), or right inside
+GitHub in your browser once it's published (see HOW-TO-PUBLISH.txt).
+
+----------------------------------------------------------------------
+THE ONE THING YOU MUST CHANGE BEFORE GOING LIVE
+----------------------------------------------------------------------
+Open:  js/app.js
+
+At the top you'll see a block called CONFIG. Change:
+
+  phone: "8801XXXXXXXXX"
+      -> your real WhatsApp number, country code + number, digits only.
+         No +, no spaces, no dashes.  e.g.  "8801712345678"
+
+Also set:
+  email:     "your@email.com"     <- quote requests by email land here
+  facebook:  "https://facebook.com/YOUR-PAGE"
+  instagram: "https://instagram.com/YOUR-PAGE"          ("" to hide)
+  linkedin:  "https://www.linkedin.com/company/YOUR-COMPANY"  ("" to hide)
+  announce:  the yellow scrolling bar text at the very top
+
+Every "Order", "Checkout", "Get a quote" and the floating green button
+reads that one phone number. Change it once and the whole site updates.
+
+----------------------------------------------------------------------
+CHANGING PRODUCTS, PROJECTS, AMIGURUMI
+----------------------------------------------------------------------
+Still in  js/app.js , scroll down to the lists marked "EDIT HERE":
+
+  FAQ                -> what the chat assistant can answer
+  DECOR              -> Room decor & statement pieces (Shop page)
+  FEATURED_ON_HOME   -> which 4 pieces show on the homepage
+                        (use exact names from PRODUCTS or AMI)
+  PRODUCTS  -> the Featured Drops cards (Shop page)
+  WISHED    -> the "You wished, we delivered" cards (Shop page)
+  WORKS     -> the Recent Work cards (homepage)
+  AMI       -> the amigurumi cards (Shop page)
+
+Each product line looks like this:
+
+  {name:"Poké Ball (openable)", sub:"Gaming · Pokémon", tag:"Gaming",
+   badge:"stock", now:"699", was:"899", img:"images/pokeball.jpg"}
+
+  name  = product name
+  sub   = the small grey line
+  tag   = little label on the photo
+  badge = "stock" (In stock) or "order" (Made to order)
+  now   = price (number only) ;  was = old price ("" for none)
+  img   = photo file in the images folder
+
+To ADD a product: copy a whole line, paste it above the last one, put a
+comma at the end of the line before it, and change the text.
+To REMOVE one: delete its whole line (and a leftover comma if needed).
+Keep the quotes, colons and commas exactly where they are.
+
+----------------------------------------------------------------------
+CHANGING HEADLINES / SECTION TEXT
+----------------------------------------------------------------------
+Big titles and paragraphs live in the .html files:
+  index.html   = professional homepage (services, capabilities,
+                 industries, process, recent work)
+  shop.html    = the collectibles shop
+  custom.html  = the Get a quote page
+Open the page you want and search for
+"EDIT HERE". Change the text between  >  and  <  only.
+Example:   <h2>Featured drops</h2>   ->   <h2>New this week</h2>
+
+----------------------------------------------------------------------
+SWAPPING OR ADDING A PHOTO
+----------------------------------------------------------------------
+1. Put your new image in the  images  folder.
+2. Keep photos reasonably small (long side ~900px, JPG) so the site
+   loads fast. Any free tool like squoosh.app can shrink them.
+3. Point a product at it by changing its  img:  line, e.g.
+      img:"images/my-new-photo.jpg"
+
+----------------------------------------------------------------------
+STATS & REVIEWS (placeholders — put your real numbers)
+----------------------------------------------------------------------
+Stats: in index.html search  data-to  and change the numbers
+(240 / 15 / 30 / 7) to your real figures.
+Testimonials: in index.html search "TESTIMONIALS" and edit the three
+quotes / names / places.
+Capabilities & materials tables: in index.html search "MATERIALS TABLE"
+— add or remove <tr> rows as you stock new filaments.
+Chat assistant answers: js/app.js -> the FAQ list near the top.
+
+----------------------------------------------------------------------
+PREVIEW BEFORE PUBLISHING
+----------------------------------------------------------------------
+Double-click  index.html  to open it in your browser. Everything works
+locally EXCEPT it needs internet for the fonts. If you edit a file,
+just refresh the browser to see the change.
+
+Tip: if a change ever "breaks" the page, you probably deleted a quote,
+comma or bracket. Undo (Ctrl+Z) and try again.
+======================================================================
+
+----------------------------------------------------------------------
+ADDING A WHOLE NEW SECTION (e.g. Gaming corner, more decor)
+----------------------------------------------------------------------
+Open  SECTION-TEMPLATES.html  — it's a copy-paste parts box with
+ready-made blocks (product row, info cards, dark statement band, new
+category tile, FAQ entry) and instructions on each. Every section
+takes a background class: band-white, band-tint or band-deep —
+alternate them down the page so the scroll stays lively.
+
+----------------------------------------------------------------------
+SEO / AFTER YOU BUY A DOMAIN
+----------------------------------------------------------------------
+The site ships SEO-ready (titles, descriptions, social-share tags,
+structured data for Google, robots.txt and sitemap.xml). They use the
+placeholder  https://www.jontormontor.com  for now.
+When you buy your real domain, do a find-and-replace (Ctrl+H) of that
+placeholder with your domain in: every .html file, robots.txt and
+sitemap.xml. That's it.
+Then (optional but smart): go to Google Search Console, add your
+domain, and submit sitemap.xml — your pages start appearing on Google.
+======================================================================

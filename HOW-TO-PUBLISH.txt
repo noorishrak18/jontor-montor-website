@@ -1,0 +1,113 @@
+======================================================================
+ JONTOR MONTOR — HOW TO PUBLISH YOUR WEBSITE (step by step)
+======================================================================
+
+You have two ways to put this online. Both are FREE and give you a
+live https:// website.
+
+  PATH A (recommended): GitHub + Cloudflare Pages
+     -> edit any text right in your browser later, and the live site
+        updates itself in ~30 seconds. Best for "systematic edits".
+
+  PATH B (no GitHub): Cloudflare Pages direct upload
+     -> drag-and-drop the folder. Simplest to start, but every future
+        change means re-uploading the folder.
+
+You can start with Path B and switch to Path A anytime.
+
+BEFORE YOU START: open js/app.js and set your real phone / socials
+(see HOW-TO-EDIT.txt). You can also do this after publishing.
+
+======================================================================
+ PATH A — GitHub + Cloudflare Pages  (recommended)
+======================================================================
+
+STEP 1 — Make a GitHub account
+  1. Go to  https://github.com  and sign up (free). Verify your email.
+
+STEP 2 — Create a repository ("repo" = a folder for your site)
+  1. Top-right "+"  ->  "New repository".
+  2. Repository name:  jontor-montor   (any name is fine).
+  3. Keep it Public. Don't tick "Add a README".
+  4. Click "Create repository".
+
+STEP 3 — Upload your site files
+  1. On the new repo page click  "uploading an existing file"
+     (the link in the "Quick setup" box).
+  2. Open this website folder on your computer. Select EVERYTHING
+     INSIDE it — index.html, about.html, contact.html, custom.html,
+     the css, js and images folders, and the .txt files — and drag
+     them into the browser.
+     IMPORTANT: upload the CONTENTS of the folder, not the folder
+     itself. index.html must sit at the top level of the repo.
+  3. Scroll down, click  "Commit changes".
+
+STEP 4 — Connect Cloudflare Pages
+  1. Go to  https://dash.cloudflare.com  and sign up / log in (free).
+  2. Left menu:  "Workers & Pages"  ->  "Create"  ->  "Pages" tab
+     ->  "Connect to Git".
+  3. Authorise GitHub, then pick your  jontor-montor  repo.
+  4. Build settings: LEAVE EVERYTHING BLANK.
+       - Framework preset: None
+       - Build command: (empty)
+       - Build output directory: /   (just a slash, or leave default)
+     This is a plain HTML site, so there is nothing to "build".
+  5. Click  "Save and Deploy". Wait ~1 minute.
+  6. You get a live link like  https://jontor-montor.pages.dev
+
+STEP 5 — Editing later (the magic part)
+  1. In GitHub, open your repo, click the file you want (e.g. js/app.js).
+  2. Click the pencil ("Edit") icon, change the text, click
+     "Commit changes".
+  3. Cloudflare notices and re-publishes automatically in ~30 seconds.
+     Refresh your live site — done. No re-uploading ever.
+
+======================================================================
+ PATH B — Cloudflare Pages direct upload  (no GitHub)
+======================================================================
+
+STEP 1 — Cloudflare account
+  1. Go to  https://dash.cloudflare.com  and sign up / log in (free).
+
+STEP 2 — Create the project
+  1. Left menu:  "Workers & Pages"  ->  "Create"  ->  "Pages" tab
+     ->  "Upload assets"  (also called "Direct upload").
+  2. Give it a name, e.g.  jontor-montor .  Click "Create project".
+
+STEP 3 — Upload
+  1. Drag this whole website folder (or a ZIP of it) onto the page.
+     If dragging the folder, make sure index.html ends up at the top
+     level (not inside an extra sub-folder).
+  2. Click  "Deploy site". Wait ~1 minute.
+  3. You get a live link like  https://jontor-montor.pages.dev
+
+STEP 4 — Updating later
+  1. Same project  ->  "Create deployment"  ->  drag the updated
+     folder again  ->  Deploy. The new version replaces the old one.
+
+======================================================================
+ ADD YOUR OWN DOMAIN  (e.g. jontormontor.com)  — optional
+======================================================================
+  1. In Cloudflare dashboard:  "Registrar"  ->  "Register Domain",
+     search your name and buy it (~USD 10–11/year for .com, at cost).
+     (A .com is fine — you don't need a trade licence for it, unlike
+     .com.bd.)
+  2. Go back to  Workers & Pages  ->  your Pages project  ->
+     "Custom domains"  ->  "Set up a custom domain"  ->  type your
+     domain  ->  "Activate".
+     Because the domain is already in Cloudflare, it connects
+     automatically with free HTTPS. Live in a few minutes.
+
+======================================================================
+ QUICK CHECKLIST
+======================================================================
+  [ ] Set phone + email + LinkedIn + socials in js/app.js
+  [ ] Publish (Path A or B) -> get the .pages.dev link
+  [ ] Open the live link on your phone, test the WhatsApp buttons
+  [ ] Put real numbers in the stats + real testimonials
+  [ ] Try the chat assistant (bottom-right) and tweak FAQ answers
+  [ ] (Optional) buy a domain and attach it
+  [ ] Put the live link on your Facebook page
+
+Need help on any single step — send me the step number.
+======================================================================

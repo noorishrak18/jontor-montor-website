@@ -1,13 +1,37 @@
 /* =====================================================================
-   JONTOR MONTOR — site logic (shared by every page)   ·   v3
+   JONTOR MONTOR — everything you edit lives in this file
    =====================================================================
-   Everything you'll normally change lives in the blocks below:
-     1) CONFIG    — phone, email, socials, delivery charges, bKash number
-     2) ORDERS    — your Google Sheet web-app link (see SETUP-ORDERS.txt)
-     3) FAQ       — the questions the chat assistant can answer
-     4) PRODUCTS  — everything you sell
-   Look for "EDIT HERE". Change text between quotes; keep the quotes,
-   colons and commas exactly where they are.
+
+   ┌──────────────────────────────────────────────────────────────┐
+   │  WANT TO...                          SEARCH FOR (Ctrl+F)     │
+   ├──────────────────────────────────────────────────────────────┤
+   │  change a price                      TASK: PRICE             │
+   │  replace a product photo             TASK: PHOTO             │
+   │  add extra photos to a product       TASK: MORE PHOTOS       │
+   │  move a product to another category  TASK: MOVE CATEGORY     │
+   │  add a brand new product             TASK: NEW PRODUCT       │
+   │  hide or delete a product            TASK: HIDE              │
+   │  change delivery charges             TASK: DELIVERY          │
+   │  change the bKash number             TASK: BKASH             │
+   │  change the cancellation window      TASK: CANCEL WINDOW     │
+   │  change what's on the homepage       TASK: HOMEPAGE          │
+   │  turn the yellow top strip back on   TASK: TOP STRIP         │
+   │  see the list of valid categories    TASK: CATEGORY LIST     │
+   └──────────────────────────────────────────────────────────────┘
+
+   THE FIVE RULES
+     1. Only change words BETWEEN "quote marks".
+     2. Every product ends with a comma — except the last one.
+     3. Prices go in quotes:  now:"1899"   not  now:1899
+     4. Never type a plain " inside a sentence. Use ' instead.
+     5. Photo names are case-sensitive: photo.JPG is not photo.jpg
+
+   HOUSE STYLE: we do not put a comma before "and", "but" or "or".
+     Write:  fast, cheap and good
+     Not:    fast, cheap, and good
+
+   Everything below the line that says "Machinery below" is code.
+   You never need to touch it.
    ===================================================================== */
 
 /* ============ 1) EDIT HERE ▸ YOUR BUSINESS DETAILS ============ */
@@ -24,31 +48,37 @@ var CONFIG = {
   instagram: "https://www.instagram.com/jontor.montor?igsh=ZjBpaGNjOWNrMGxq",
   linkedin:  "https://www.linkedin.com/company/jontor-montor/",
 
-  /* The yellow announcement strip is switched off. To bring it back,
-     set announceOn to true and edit the text below. */
+  /* ---- TASK: TOP STRIP ----
+     The yellow bar across the top of every page. It is OFF.
+     Change false to true to bring it back for a sale, then edit
+     the announce line underneath. */
   announceOn: false,
   announce:   "Order online — pick your pieces, fill the form, done. COD, bKash & Nagad accepted.",
 
-  /* ---- delivery charges (৳) ---- */
+  /* ---- TASK: DELIVERY — what you charge to deliver (৳) ----
+     Plain numbers here, NO quote marks. */
   deliveryDhaka:   70,
   deliveryOutside: 130,
 
-  /* ---- bKash "Send Money" number shown at checkout ---- */
+  /* ---- TASK: BKASH — the number customers Send Money to ---- */
   bkashNumber: "01601333064",
 
   /* ---- Nagad. Set nagadOn to false to hide Nagad at checkout ---- */
   nagadOn:     true,
   nagadNumber: "01601333064",
 
-  /* ---- how many hours a customer may cancel their own order ---- */
-  cancelHours: 6
+  /* ---- TASK: CANCEL WINDOW ----
+     How many hours a customer may cancel their own order.
+     If you change this, change CANCEL_HOURS in the Apps Script too
+     or the two will disagree. */
+  cancelHours: 1
 };
 
 /* ============ 2) EDIT HERE ▸ GOOGLE SHEET ORDER INBOX ============
    Paste the /exec web-app URL you get from Google Apps Script here.
    Full instructions are in SETUP-ORDERS.txt.
    Until you paste it, orders fall back to opening WhatsApp.            */
-var ORDER_ENDPOINT = "https://script.google.com/macros/s/AKfycbyTIL94u2JnN-NSOwHT7BiF6NhXP6cnqMn7HJtp9k959KVdy-r-ZZdBhffAAQQENg/exec";
+var ORDER_ENDPOINT = "";
 
 /* ============ 3) EDIT HERE ▸ FAQ (what the chat assistant knows) ====
    q = the question shown as a tappable chip
@@ -57,7 +87,7 @@ var ORDER_ENDPOINT = "https://script.google.com/macros/s/AKfycbyTIL94u2JnN-NSOwH
 var FAQ = [
  {q:"How do I order?",
   k:["order","how to order","buy","purchase","checkout","cart","start"],
-  a:"Right here on the site — no messaging needed.\nOpen the Shop, tap a piece to see its details, add it to your cart, then hit Checkout. You fill in your name, phone, address and payment method, and we get the order instantly."},
+  a:"Right here on the site — no messaging needed.\nOpen the Shop, tap a piece to see its details, add it to your cart, then hit Checkout. You fill in your name, phone, address and payment method and we get the order instantly."},
  {q:"How do I get a quote?",
   k:["quote","quotation","rfq","custom quote"],
   a:"For anything custom (a part, a model, a character we don't list), use the Get a quote page. We usually reply within a few hours with a price and lead time."},
@@ -78,13 +108,13 @@ var FAQ = [
   a:"Best: STL, OBJ, STEP or 3MF files.\nNo CAD file? A drawing, photo or even a clear description works — we can model it for you (small modelling fee depending on complexity)."},
  {q:"Can you do university projects?",
   k:["university","student","thesis","final year","architecture","civil","naval","mechanical","eee","project","model","scale"],
-  a:"Yes — that's one of our main services. Scale models for architecture & civil, mechanical assemblies, enclosures for EEE, and more.\nStudent rates are available. Send your file or drawing on the Get a quote page."},
+  a:"Yes — that's one of our main services. Scale models for architecture & civil, mechanical assemblies, enclosures for EEE and more.\nStudent rates are available. Send your file or drawing on the Get a quote page."},
  {q:"Do you work with companies?",
   k:["company","corporate","firm","business","bulk","batch","production","prototype","nda","b2b"],
   a:"Yes — we prototype and produce small batches for companies: enclosures, jigs & fixtures, brackets, product prototypes and presentation models.\nNDA on request, invoice available. Email us the RFQ or use the Get a quote page."},
  {q:"Is my design confidential?",
   k:["confidential","nda","secret","privacy","protect","ip"],
-  a:"Yes. Client files are never shared or reused, and we're happy to sign an NDA before you send anything."},
+  a:"Yes. Client files are never shared or reused and we're happy to sign an NDA before you send anything."},
  {q:"Can you make something not on the site?",
   k:["custom","not on","anything","request","specific","character","figure","gift"],
   a:"Almost certainly — most of what we make started as a customer request.\nName the character, prop or part on the Get a quote page and we'll tell you if it's printable and what it costs."},
@@ -93,21 +123,105 @@ var FAQ = [
   a:"We're based in Bangladesh and deliver nationwide. You can order entirely through this website — no walk-in showroom yet."}
 ];
 
-/* ============ 4) EDIT HERE ▸ PRODUCTS ============
-   badge  : "stock" = In stock | "order" = Made to order
-   fandom : MUST match a tile on the shop page —
-            Anime · Harry Potter · Marvel & DC · Star Wars · Movies & TV ·
-            Gaming · Sci-Fi · Amigurumi · Bangladesh · Home decor · Flexi
-   type   : matches the "Shop by type" chips
-   desc   : shown on the product detail page
-   now/was: prices, numbers only ("" for no old price)
-   imgs   : OPTIONAL extra photos. Leave it out and the single "img"
-            is used. To add more angles, upload the photos to your
-            images folder and list them like this:
-              imgs:["images/katana-zenitsu.jpg",
-                    "images/katana-zenitsu-2.jpg",
-                    "images/katana-zenitsu-hilt.jpg"],
-            The first one in the list is the one shown on the card. */
+/* =====================================================================
+   4) YOUR PRODUCTS
+   =====================================================================
+
+   ------------------------------------------------------------------
+   TASK: CATEGORY LIST — the only values that work
+   ------------------------------------------------------------------
+   Copy-paste these. A typo does NOT show an error — the product just
+   quietly disappears from that tile. Capitals and spaces matter.
+   "Marvel & DC" is not "Marvel and DC".
+
+   fandom: must be exactly one of
+        "Anime"            "Harry Potter"      "Marvel & DC"
+        "Star Wars"        "Movies & TV"       "Gaming"
+        "Sci-Fi"           "Amigurumi"         "Bangladesh"
+        "Home decor"       "Flexi"
+     (the last two have no tile yet — they show under All products)
+
+   type: must be exactly one of
+        "Katana"           "Figure"            "Bust"
+        "Headphone stand"  "Cosplay mask"      "Keychain"
+        "Wand or prop"     "Flexi / articulated"
+        "Home decor"       "Amigurumi"         "Display"
+
+   ------------------------------------------------------------------
+   TASK: MOVE CATEGORY — put a product somewhere else
+   ------------------------------------------------------------------
+   Change the fandom: and/or type: value. That is the whole job —
+   nothing else needs touching, the shop page re-sorts itself.
+
+   Example: the Poké Ball is under Gaming. To move it to Anime,
+   find it and change
+
+        fandom:"Gaming",        ->      fandom:"Anime",
+
+   A product has ONE fandom and ONE type. To show something in two
+   places you would need two entries with different names.
+
+   ------------------------------------------------------------------
+   TASK: PHOTO — replace a product's picture
+   ------------------------------------------------------------------
+   1. Upload the new photo to the images folder on GitHub.
+      Lowercase, hyphens not spaces:  katana-zenitsu-new.jpg
+   2. Change the img: line to point at it:
+
+        img:"images/katana-zenitsu.jpg"
+                    ^^^^^^^^^^^^^^^^^^ just this filename
+
+   EASIEST TRICK: give the new photo the EXACT same filename as the
+   old one and upload it over the top. Then you change nothing in
+   this file at all. (You will need Ctrl+Shift+R to stop your
+   browser showing the cached old picture.)
+
+   If the product also has an imgs: list, update the filename there
+   too — otherwise the gallery still shows the old photo.
+
+   ------------------------------------------------------------------
+   TASK: MORE PHOTOS — extra angles on the details page
+   ------------------------------------------------------------------
+   Add an imgs: line. First photo in the list is the one on the
+   shop card. Include the main photo in the list too.
+
+        imgs:["images/katana-zenitsu.jpg",
+              "images/katana-zenitsu-2.jpg",
+              "images/katana-zenitsu-hilt.jpg"],
+
+   No imgs: line = the product just uses its single img:. Fine.
+
+   ------------------------------------------------------------------
+   TASK: NEW PRODUCT / TASK: PRICE / TASK: HIDE
+   ------------------------------------------------------------------
+   NEW PRODUCT: copy a whole block below (from { to },), paste it
+   underneath, then edit every field. Keep the comma on the end.
+
+   PRICE: now: is today's price, was: is the crossed-out one.
+          The -25% badge works itself out. For no discount: was:""
+
+   HIDE:  put // in front of every line of that product. It stops
+          showing but you keep the text. Safer than deleting.
+
+   ------------------------------------------------------------------
+   WHAT EVERY FIELD DOES — annotated example
+   ------------------------------------------------------------------
+   {name:   "Zenitsu Nichirin Katana",     the big title
+    sub:    "Anime · Demon Slayer",        small grey line under it
+    fandom: "Anime",                       which TILE it lives under
+    type:   "Katana",                      which CHIP it lives under
+    badge:  "stock",                       "stock" or "order" only
+    now:    "1899",                        price today, in quotes
+    was:    "2399",                        old price, "" for none
+    img:    "images/katana-zenitsu.jpg",   the shop card photo
+    imgs:   [...],                         OPTIONAL extra photos
+    desc:   "...",                         OPTIONAL paragraph
+    specs:  ["...","..."]},                OPTIONAL bullet points
+
+   Required: name, fandom, type, badge, now, img.
+   The rest are optional and can be left out entirely.
+   ===================================================================== */
+
 var PRODUCTS = [
  {name:"Zenitsu Nichirin Katana", sub:"Anime · Demon Slayer", fandom:"Anime", type:"Katana", badge:"stock", now:"1899", was:"2399", img:"images/katana-zenitsu.jpg",
   imgs:["images/katana-zenitsu.jpg","images/hero-zenitsu.jpg"],
@@ -164,11 +278,14 @@ var PRODUCTS = [
   specs:["Roughly 5 cm","Metal split ring included","Solid infill — won't snap","Pick your colour"]},
 
  {name:"Articulated Snake (flexi)", sub:"Flexi · fidget", fandom:"Flexi", type:"Flexi / articulated", badge:"stock", now:"349", was:"500", img:"images/snake-flexi.jpg",
-  desc:"Prints in one piece and comes off the bed already moving — every segment articulates, so it coils, slithers and sits over a monitor. The classic desk fidget, and a genuinely good demo of what the printer can do.",
+  desc:"Prints in one piece and comes off the bed already moving — every segment articulates, so it coils, slithers and sits over a monitor. The classic desk fidget and a genuinely good demo of what the printer can do.",
   specs:["Roughly 22 cm long","Fully articulated, no assembly","Multi-colour options","Great for kids"]}
 ];
 
-/* EDIT HERE ▸ ROOM DECOR & STATEMENT PIECES */
+/* ---- ROOM DECOR & STATEMENT PIECES ----
+   Same fields and same rules as PRODUCTS above. These also appear in
+   the main shop grid — they are only listed separately so you can
+   find them easily. */
 var DECOR = [
  {name:"Buddha Statue", sub:"Statue · home decor", fandom:"Home decor", type:"Home decor", badge:"order", now:"1299", was:"1699", img:"images/buddha.jpg",
   desc:"A seated Buddha finished to look like carved stone rather than plastic — the surface is sanded and treated so the light catches it properly. A calm, weighty-looking piece for a shelf, entryway or studio corner.",
@@ -183,19 +300,24 @@ var DECOR = [
   specs:["Display scale, roughly 22 cm","Multi-part, bonded seamless","Gloss black finish","Made to order · 6–10 days"]}
 ];
 
-/* EDIT HERE ▸ AMIGURUMI */
+/* ---- AMIGURUMI (handmade crochet) ----
+   Simpler than the others: no fandom or type needed. Both are set
+   automatically to "Amigurumi". You only give name, prices, img
+   and desc. Extra photos work here too — add an imgs: line. */
 var AMI = [
  {name:"লক্ষ্মী প্যাঁচা · Owl", now:"239", was:"470", img:"images/ami-owl.jpg",
   desc:"The lokkhi pyacha owl, handmade in soft yarn — a Bengali good-luck figure that sits happily on a desk or shelf. Handmade, so no two are identical."},
  {name:"সুখ পাখি · Bird", now:"319", was:"550", img:"images/ami-bird.jpg",
-  desc:"A plump little sukh pakhi in bright yarn. Soft, squeezable, and small enough to sit on a monitor or a bedside table."},
+  desc:"A plump little sukh pakhi in bright yarn. Soft, squeezable and small enough to sit on a monitor or a bedside table."},
  {name:"মন্টু হাতি · Elephant", now:"289", was:"570", img:"images/ami-elephant.jpg",
-  desc:"Montu the elephant — round ears, stubby legs, and a very smug expression. A safe gift for basically anyone."},
+  desc:"Montu the elephant — round ears, stubby legs and a very smug expression. A safe gift for basically anyone."},
  {name:"সাগর ঘোড়া · Seahorse", now:"289", was:"570", img:"images/ami-seahorse.jpg",
-  desc:"A curled seahorse with a ridged back, crocheted by hand in ocean colours. One of the trickier ones to make, and it shows."}
+  desc:"A curled seahorse with a ridged back, crocheted by hand in ocean colours. One of the trickier ones to make and it shows."}
 ];
 
-/* EDIT HERE ▸ "YOU WISHED, WE DELIVERED" */
+/* ---- "YOU WISHED, WE DELIVERED" row on the shop page ----
+   These are NOT for sale — they are proof of custom work. No price,
+   no cart button. req: is the little caption underneath. */
 var WISHED = [
  {name:"CUET FS clapperboard",     req:"Requested by CUET Film Society",  img:"images/cuet.jpg"},
  {name:"John Wick figure",         req:"A customer asked — we made it",   img:"images/johnwick.jpg"},
@@ -203,7 +325,11 @@ var WISHED = [
  {name:"Doctor Doom cosplay mask", req:"Made to a buyer's spec",          img:"images/drdoom.jpg"}
 ];
 
-/* EDIT HERE ▸ PROJECTS / OUR WORK (homepage) — cat: mech, eee, prod, rnd */
+/* ---- PROJECTS / OUR WORK (homepage) ----
+   cat: decides which tab it appears under. Use exactly one of:
+        "mech"  Mechanical      "eee"   EEE
+        "prod"  Product         "rnd"   Company R&D
+   meta: is the three little grey labels under the title. */
 var WORKS = [
  {cat:"mech", label:"Mechanical",          title:"Gear & shaft assembly",   meta:["Functional","PETG","Moving parts"], img:"images/proj-gear.jpg"},
  {cat:"eee",  label:"EEE",                 title:"Electronics enclosure",   meta:["Custom fit","PLA","PCB housing"],   img:"images/proj-eee.jpg"},
@@ -213,7 +339,11 @@ var WORKS = [
  {cat:"mech", label:"Mechanical",          title:"Precision cylinder part", meta:["Prototype","PETG","Test fit"],      img:"images/proj-cylinder.jpg"}
 ];
 
-/* EDIT HERE ▸ FEATURED ON HOMEPAGE — use exact names from the lists above */
+/* ---- TASK: HOMEPAGE — the four products on the front page ----
+   Just a list of names. Each one must match a product name EXACTLY,
+   character for character, including any Bengali text.
+   If you rename a product, change it here too or it silently
+   vanishes from the homepage. */
 var FEATURED_ON_HOME = [
  "Zenitsu Nichirin Katana",
  "Kratos Headphone Stand",
@@ -890,7 +1020,7 @@ function showConfirmation(o){
 /* =====================================================================
    MY ORDERS  (orders.html)
    Every order is kept on the customer's own device so they can see it
-   again, and the live status is fetched from your sheet when possible.
+   again and the live status is fetched from your sheet when possible.
    ===================================================================== */
 function getOrders(){ try{return JSON.parse(localStorage.getItem("jm_orders"))||[]}catch(e){return[]} }
 function saveOrder(o){
@@ -926,10 +1056,19 @@ function jsonp(params,cb){
   var name="jmcb_"+Math.random().toString(36).slice(2);
   var done=false;
   var s=document.createElement("script");
-  function finish(data){ if(done)return; done=true; try{delete window[name]}catch(e){window[name]=null} if(s.parentNode)s.parentNode.removeChild(s); cb(data); }
+  function finish(data){
+    if(done)return; done=true;
+    try{delete window[name]}catch(e){window[name]=null}
+    if(s.parentNode)s.parentNode.removeChild(s);
+    cb(data);
+  }
   window[name]=finish;
   var q=Object.keys(params).map(function(k){return k+"="+encodeURIComponent(params[k])}).join("&");
   s.src=ORDER_ENDPOINT+"?"+q+"&callback="+name;
+  /* An OLD Apps Script answers with plain JSON instead of calling our
+     callback, so the browser errors on it and we land here. That is the
+     usual reason live status looks "broken" — the v2 script isn't
+     deployed yet. */
   s.onerror=function(){ finish(null) };
   document.body.appendChild(s);
   setTimeout(function(){ finish(null) },9000);
@@ -937,6 +1076,7 @@ function jsonp(params,cb){
 
 function statusClass(s){
   s=(s||"NEW").toUpperCase();
+  if(s.indexOf("REQUEST")>-1)  return "st-pending";
   if(s.indexOf("CANCEL")>-1)   return "st-cancel";
   if(s.indexOf("DELIVER")>-1||s.indexOf("DONE")>-1) return "st-done";
   if(s.indexOf("SHIP")>-1)     return "st-ship";
@@ -947,6 +1087,7 @@ function statusClass(s){
 var STATUS_STEPS=["NEW","CONFIRMED","PRINTING","SHIPPED","DELIVERED"];
 function statusIndex(s){
   s=(s||"NEW").toUpperCase();
+  if(s.indexOf("REQUEST")>-1) return -2;   // asked to cancel, not confirmed
   if(s.indexOf("CANCEL")>-1) return -1;
   if(s.indexOf("DELIVER")>-1||s.indexOf("DONE")>-1) return 4;
   if(s.indexOf("SHIP")>-1) return 3;
@@ -957,7 +1098,8 @@ function statusIndex(s){
 function orderCard(o){
   var st=o.status||"NEW";
   var idx=statusIndex(st);
-  var track = idx<0 ? '<div class="ocancel">This order was cancelled.</div>'
+  var track = idx===-2 ? '<div class="opending">You asked to cancel this order. We\'ll confirm it with you shortly — if you haven\'t heard from us, send us a message.</div>'
+    : idx<0 ? '<div class="ocancel">This order was cancelled.</div>'
     : '<div class="track">'+STATUS_STEPS.map(function(lbl,i){
         return '<div class="track__s'+(i<=idx?" on":"")+'"><span class="track__d"></span><em>'+
           lbl.charAt(0)+lbl.slice(1).toLowerCase()+'</em></div>';
@@ -999,21 +1141,52 @@ function paintOrders(){
       '<a class="btn btn-gold" href="shop.html" style="margin-top:18px">Go to the shop</a></div>';
     return;
   }
-  wrap.innerHTML=all.map(orderCard).join("");
+  wrap.innerHTML='<div class="livebar"><span id="liveNote"></span>'+
+      '<button class="btn btn-ghost btn-sm" id="refreshBtn" type="button">Refresh status</button></div>'+
+    all.map(orderCard).join("");
+  var rb=document.getElementById("refreshBtn");
+  if(rb) rb.onclick=function(){ refreshStatuses(getOrders(),true); };
   refreshStatuses(all);
 }
 /* ask the sheet what the real status is now */
-function refreshStatuses(all){
-  if(!ORDER_ENDPOINT)return;
-  all.slice(0,10).forEach(function(o){
-    if(statusIndex(o.status)>=4||statusIndex(o.status)<0) return; // finished, no need
+function refreshStatuses(all,announce){
+  var note=document.getElementById("liveNote");
+  if(!ORDER_ENDPOINT){
+    if(note) note.innerHTML='<span class="live live--off">Live status isn\'t switched on yet — showing what you ordered.</span>';
+    return;
+  }
+  var pending=all.slice(0,10).filter(function(o){
+    return statusIndex(o.status)<4 && statusIndex(o.status)>=0;
+  });
+  if(!pending.length){
+    if(note&&announce) note.innerHTML='<span class="live live--ok">Up to date.</span>';
+    return;
+  }
+  if(note) note.innerHTML='<span class="live live--wait">Checking for updates…</span>';
+
+  var done=0, reached=0, changed=0;
+  pending.forEach(function(o){
     jsonp({action:"status",orderId:o.orderId,phone:o.phone},function(r){
+      done++;
+      if(r&&r.ok!==undefined) reached++;
       if(r&&r.ok&&r.status&&r.status!==o.status){
+        changed++;
         updateOrder(o.orderId,{status:r.status});
         var card=document.getElementById("oc-"+o.orderId);
         if(card){
           var fresh=getOrders().filter(function(x){return x.orderId===o.orderId})[0];
           if(fresh) card.outerHTML=orderCard(fresh);
+        }
+      }
+      if(done===pending.length&&note){
+        if(!reached){
+          note.innerHTML='<span class="live live--off">Couldn\'t reach us for a live update just now — '+
+            'showing the last status we know. <a href="'+waLink("Hi "+CONFIG.brand+"! Could you tell me the status of my order?")+
+            '" target="_blank" rel="noopener">Ask us directly</a></span>';
+        } else if(changed){
+          note.innerHTML='<span class="live live--ok">Updated just now.</span>';
+        } else {
+          note.innerHTML='<span class="live live--ok">Up to date — checked just now.</span>';
         }
       }
     });
@@ -1032,9 +1205,17 @@ function doCancel(id){
     if(r&&r.ok){
       updateOrder(id,{status:"CANCELLED BY CUSTOMER"});
       toast("Order "+id+" cancelled.");
+    }else if(r&&r.ok===false&&r.reason==="window_closed"){
+      toast("That order is past the cancellation window.");
+      updateOrder(id,{status:r.status||"NEW"});
+    }else if(r&&r.ok===false&&r.reason==="too_late_stage"){
+      toast("That order has already shipped — please message us.");
+      updateOrder(id,{status:r.status||"SHIPPED"});
     }else{
-      updateOrder(id,{status:"CANCELLED BY CUSTOMER"});
-      toast("Cancellation saved. We'll confirm it with you shortly.");
+      /* We could not confirm with the server, so we must NOT claim it is
+         cancelled — the workshop may still be printing it. */
+      updateOrder(id,{status:"CANCELLATION REQUESTED"});
+      toast("We couldn't confirm that automatically — please send us the message.");
       window.open(waLink("Hi "+CONFIG.brand+"! Please cancel my order "+id+" ("+o.name+", "+o.phone+")."),"_blank");
     }
     paintOrders();
@@ -1043,6 +1224,12 @@ function doCancel(id){
 function initOrders(){
   var wrap=document.getElementById("ordersList"); if(!wrap)return;
   paintOrders();
+
+  /* re-check when they come back to the tab, so a status you changed in
+     the sheet shows up without them reloading */
+  document.addEventListener("visibilitychange",function(){
+    if(!document.hidden) refreshStatuses(getOrders());
+  });
 
   document.addEventListener("click",function(e){
     var b=e.target.closest("[data-cancel]");
@@ -1062,7 +1249,7 @@ function initOrders(){
           (r.total?('<br>Total '+r.total+'৳ · '+(r.items||"")):"")+'</div>';
       }else{
         out.innerHTML='<div class="lkmsg">We couldn\'t find an order with that ID and phone number. '+
-          'Check both, or <a href="'+waLink("Hi "+CONFIG.brand+"! I'm trying to track order "+id)+'" target="_blank" rel="noopener">message us</a>.</div>';
+          'Check both or <a href="'+waLink("Hi "+CONFIG.brand+"! I'm trying to track order "+id)+'" target="_blank" rel="noopener">message us</a>.</div>';
       }
     });
   });

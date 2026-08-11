@@ -24,10 +24,13 @@ var CONFIG = {
   instagram: "https://www.instagram.com/jontor.montor?igsh=ZjBpaGNjOWNrMGxq",
   linkedin:  "https://www.linkedin.com/company/jontor-montor/",
 
-  announce:  "Order online — pick your pieces, fill the form, done. COD, bKash & Nagad accepted.",
+  /* The yellow announcement strip is switched off. To bring it back,
+     set announceOn to true and edit the text below. */
+  announceOn: false,
+  announce:   "Order online — pick your pieces, fill the form, done. COD, bKash & Nagad accepted.",
 
   /* ---- delivery charges (৳) ---- */
-  deliveryDhaka:   80,
+  deliveryDhaka:   70,
   deliveryOutside: 130,
 
   /* ---- bKash "Send Money" number shown at checkout ---- */
@@ -35,14 +38,17 @@ var CONFIG = {
 
   /* ---- Nagad. Set nagadOn to false to hide Nagad at checkout ---- */
   nagadOn:     true,
-  nagadNumber: "01601333064"
+  nagadNumber: "01601333064",
+
+  /* ---- how many hours a customer may cancel their own order ---- */
+  cancelHours: 6
 };
 
 /* ============ 2) EDIT HERE ▸ GOOGLE SHEET ORDER INBOX ============
    Paste the /exec web-app URL you get from Google Apps Script here.
    Full instructions are in SETUP-ORDERS.txt.
    Until you paste it, orders fall back to opening WhatsApp.            */
-var ORDER_ENDPOINT = "https://script.google.com/macros/s/AKfycbyTIL94u2JnN-NSOwHT7BiF6NhXP6cnqMn7HJtp9k959KVdy-r-ZZdBhffAAQQENg/exec";
+var ORDER_ENDPOINT = "";
 
 /* ============ 3) EDIT HERE ▸ FAQ (what the chat assistant knows) ====
    q = the question shown as a tappable chip
@@ -94,9 +100,17 @@ var FAQ = [
             Gaming · Sci-Fi · Amigurumi · Bangladesh · Home decor · Flexi
    type   : matches the "Shop by type" chips
    desc   : shown on the product detail page
-   now/was: prices, numbers only ("" for no old price)                */
+   now/was: prices, numbers only ("" for no old price)
+   imgs   : OPTIONAL extra photos. Leave it out and the single "img"
+            is used. To add more angles, upload the photos to your
+            images folder and list them like this:
+              imgs:["images/katana-zenitsu.jpg",
+                    "images/katana-zenitsu-2.jpg",
+                    "images/katana-zenitsu-hilt.jpg"],
+            The first one in the list is the one shown on the card. */
 var PRODUCTS = [
  {name:"Zenitsu Nichirin Katana", sub:"Anime · Demon Slayer", fandom:"Anime", type:"Katana", badge:"stock", now:"1899", was:"2399", img:"images/katana-zenitsu.jpg",
+  imgs:["images/katana-zenitsu.jpg","images/hero-zenitsu.jpg"],
   desc:"Agatsuma Zenitsu's lightning-pattern Nichirin blade, printed in sections and bonded into a near-seamless full-length katana. Comes with a display stand. Hand-finished and painted to match the anime's yellow-white lightning motif.",
   specs:["Roughly 100 cm assembled","Display stand included","PLA+ · hand-painted finish","Display piece — not a real blade"]},
 
@@ -117,6 +131,7 @@ var PRODUCTS = [
   specs:["Roughly 35 cm","Presentation box included","Wood-effect hand finish","Made to order · 4–7 days"]},
 
  {name:"Kratos Headphone Stand", sub:"Gaming · God of War", fandom:"Gaming", type:"Headphone stand", badge:"stock", now:"2989", was:"3999", img:"images/kratos-stand.jpg",
+  imgs:["images/kratos-stand.jpg","images/hero-kratos.jpg"],
   desc:"Kratos in full Spartan detail, doubling as a weighted headphone stand. The shoulder and axe geometry cradle the headband so nothing slips. One of our most-requested desk pieces.",
   specs:["Roughly 28 cm tall","Fits most over-ear headsets","Weighted base — won't tip","PLA+ · hand-painted"]},
 
@@ -236,7 +251,7 @@ function buildChrome(){
   var header=document.getElementById("site-header");
   if(header){
     header.innerHTML =
-     '<div class="topbar"><span id="ticker">'+CONFIG.announce+'</span></div>'+
+     (CONFIG.announceOn?'<div class="topbar"><span id="ticker">'+CONFIG.announce+'</span></div>':'')+
      '<header class="nav" id="siteNav"><div class="wrap nav__in">'+
        '<a href="index.html" class="brand"><img src="'+logo+'" alt="logo"> '+CONFIG.brand+'</a>'+
        '<nav class="navlinks">'+
@@ -248,6 +263,7 @@ function buildChrome(){
          '<a href="custom.html"'+(PAGE_FILE==="custom"?' class="here"':'')+'>Get a quote</a>'+
          '<a href="about.html"'+(PAGE_FILE==="about"?' class="here"':'')+'>About</a>'+
          '<a href="contact.html"'+(PAGE_FILE==="contact"?' class="here"':'')+'>Contact</a>'+
+         '<a href="orders.html"'+(PAGE_FILE==="orders"?' class="here"':'')+'>My orders</a>'+
        '</nav>'+
        '<div class="nav__right">'+
          '<button class="iconbtn" id="cartBtn" aria-label="Cart">'+
@@ -271,7 +287,7 @@ function buildChrome(){
        '<div class="foot__brand"><a href="index.html" class="brand"><img src="'+logo+'" alt="logo"> '+CONFIG.brand+'</a>'+
          '<p>3D printing studio in Bangladesh — rapid prototyping and small-batch production for companies and students, plus a collectibles shop loved by fans.</p>'+
          '<div class="paystrip"><span>Cash on delivery</span><span>bKash</span><span>Nagad</span><span>Invoice for companies</span></div></div>'+
-       '<div><h5>Pages</h5><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="custom.html">Get a quote</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>'+
+       '<div><h5>Pages</h5><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="custom.html">Get a quote</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="orders.html">My orders</a></div>'+
        '<div><h5>Shop by fandom</h5><a href="shop.html?fandom=Anime">Anime</a><a href="shop.html?fandom=Harry%20Potter">Harry Potter</a><a href="shop.html?fandom=Marvel%20%26%20DC">Marvel &amp; DC</a><a href="shop.html?fandom=Gaming">Gaming</a><a href="shop.html?fandom=Amigurumi">Amigurumi</a></div>'+
        '<div><h5>Services</h5><a href="'+HOME+'#services">Rapid prototyping</a><a href="'+HOME+'#services">Small-batch production</a><a href="'+HOME+'#capabilities">Materials &amp; specs</a>'+
          '<p style="color:var(--muted);font-size:13px;margin-top:10px">Find us on</p>'+
@@ -363,6 +379,7 @@ function pcard(p){
   return '<article class="pcard" data-open="'+key+'" role="button" tabindex="0">'+
     '<div class="pcard__media">'+badge+'<span class="ftag">'+p.fandom+'</span>'+
     '<img src="'+p.img+'" alt="'+p.name+'" loading="lazy">'+
+    (productShots(p).length>1?'<span class="shots">'+productShots(p).length+' photos</span>':'')+
     '<span class="viewhint">View details</span></div>'+
     '<div class="pcard__body"><div class="pcard__name">'+p.name+'</div><div class="pcard__sub">'+p.sub+'</div>'+
     '<div class="price">'+price+'</div>'+
@@ -390,6 +407,11 @@ function initCardActions(){
   });
   document.addEventListener("keydown",function(e){
     if(e.key==="Escape") closeProduct();
+    var modalOpen=document.getElementById("pmodal")&&document.getElementById("pmodal").classList.contains("on");
+    if(modalOpen&&GALLERY_NAV){
+      if(e.key==="ArrowLeft")  GALLERY_NAV(GALLERY_POS()-1);
+      if(e.key==="ArrowRight") GALLERY_NAV(GALLERY_POS()+1);
+    }
     if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("pcard")){
       e.preventDefault(); openProduct(decodeURIComponent(e.target.getAttribute("data-open")));
     }
@@ -405,6 +427,40 @@ function ensurePmodal(){
   document.body.appendChild(m);
   document.getElementById("pmodalOv").addEventListener("click",closeProduct);
 }
+/* every photo for a product: the imgs list if it has one, otherwise just img */
+function productShots(p){
+  var list=(p.imgs&&p.imgs.length)?p.imgs.slice():[p.img];
+  return list.filter(function(s){return !!s});
+}
+/* arrows, thumbnails, swipe and arrow keys for the detail gallery */
+function initGallery(total){
+  var i=0;
+  var imgs=[].slice.call(document.querySelectorAll("#galStage .gal__img"));
+  var thumbs=[].slice.call(document.querySelectorAll("#galThumbs .gal__thumb"));
+  var counter=document.getElementById("galCount");
+  function show(n){
+    i=(n+total)%total;
+    imgs.forEach(function(el,k){el.classList.toggle("on",k===i)});
+    thumbs.forEach(function(el,k){el.classList.toggle("on",k===i)});
+    if(counter) counter.textContent=(i+1)+" / "+total;
+  }
+  document.getElementById("galPrev").onclick=function(e){e.stopPropagation();show(i-1)};
+  document.getElementById("galNext").onclick=function(e){e.stopPropagation();show(i+1)};
+  thumbs.forEach(function(t){ t.onclick=function(){show(+t.getAttribute("data-i"))}; });
+
+  var stage=document.getElementById("galStage"), x0=null;
+  stage.addEventListener("touchstart",function(e){x0=e.touches[0].clientX},{passive:true});
+  stage.addEventListener("touchend",function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>40) show(dx<0?i+1:i-1);
+    x0=null;
+  },{passive:true});
+
+  GALLERY_NAV=show; GALLERY_POS=function(){return i};
+}
+var GALLERY_NAV=null, GALLERY_POS=null;
+
 function openProduct(name){
   var p=findProduct(name); if(!p)return;
   ensurePmodal();
@@ -412,9 +468,25 @@ function openProduct(name){
   var badge=p.badge==="stock"?'<span class="badge b-stock">In stock</span>':'<span class="badge b-order">Made to order</span>';
   var specs=(p.specs||[]).map(function(s){return '<li>'+s+'</li>'}).join("");
   var key=encodeURIComponent(p.name);
+  var shots=productShots(p);
+  var gallery;
+  if(shots.length>1){
+    gallery='<div class="pmodal__media gal">'+badge+
+      '<div class="gal__stage" id="galStage">'+
+        shots.map(function(src,i){return '<img class="gal__img'+(i===0?" on":"")+'" src="'+src+'" alt="'+p.name+' — photo '+(i+1)+'">'}).join("")+
+        '<button class="gal__nav gal__prev" id="galPrev" aria-label="Previous photo">&#8249;</button>'+
+        '<button class="gal__nav gal__next" id="galNext" aria-label="Next photo">&#8250;</button>'+
+        '<span class="gal__count" id="galCount">1 / '+shots.length+'</span>'+
+      '</div>'+
+      '<div class="gal__thumbs" id="galThumbs">'+
+        shots.map(function(src,i){return '<button class="gal__thumb'+(i===0?" on":"")+'" data-i="'+i+'" aria-label="Photo '+(i+1)+'"><img src="'+src+'" alt=""></button>'}).join("")+
+      '</div></div>';
+  } else {
+    gallery='<div class="pmodal__media"><img src="'+shots[0]+'" alt="'+p.name+'">'+badge+'</div>';
+  }
   document.getElementById("pmodalPanel").innerHTML=
     '<button class="pmodal__x" aria-label="Close">&times;</button>'+
-    '<div class="pmodal__media"><img src="'+p.img+'" alt="'+p.name+'">'+badge+'</div>'+
+    gallery+
     '<div class="pmodal__info">'+
       '<div class="pmodal__tags"><span>'+p.fandom+'</span><span>'+p.type+'</span></div>'+
       '<h3>'+p.name+'</h3>'+
@@ -431,6 +503,8 @@ function openProduct(name){
       '<div class="pmodal__note">Cash on delivery, bKash or Nagad · delivered anywhere in Bangladesh · '+
         '<a href="custom.html">want it in a different size or colour?</a></div>'+
     '</div>';
+  if(shots.length>1) initGallery(shots.length);
+
   var q=1;
   var qEl=document.getElementById("pmQty");
   document.getElementById("pmQtyMinus").onclick=function(){ if(q>1){q--;qEl.textContent=q;} };
@@ -445,6 +519,7 @@ function openProduct(name){
 function closeProduct(){
   var m=document.getElementById("pmodal"); if(!m)return;
   m.classList.remove("on"); document.body.style.overflow="";
+  GALLERY_NAV=null; GALLERY_POS=null;
   if(history.replaceState) history.replaceState(null,"",filterUrl());
 }
 /* the URL that represents the current filter state (used after closing a product) */
@@ -601,6 +676,7 @@ function initReveal(){
 /* =====================================================================
    CHECKOUT  (checkout.html)
    ===================================================================== */
+function o_(obj,k){return obj[k]}
 function orderId(){
   var d=new Date(), p=function(n){return(n<10?"0":"")+n};
   return "JM-"+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+"-"+
@@ -671,7 +747,10 @@ function initCheckout(){
   syncPay();
   paintCheckout();
 
-  document.getElementById("coPlace").addEventListener("click",placeOrder);
+  /* paintCheckout() replaces the whole panel when the cart is empty,
+     so the button may no longer exist by this point. */
+  var place=document.getElementById("coPlace");
+  if(place) place.addEventListener("click",placeOrder);
 }
 function val(id){var el=document.getElementById(id);return el?el.value.trim():"";}
 function markBad(id,bad){var el=document.getElementById(id);if(el)el.classList.toggle("bad",!!bad);}
@@ -701,6 +780,7 @@ function placeOrder(){
 
   var payload={
     orderId:   id,
+    placedISO: new Date().toISOString(),
     placedAt:  new Date().toLocaleString("en-GB",{timeZone:"Asia/Dhaka"}),
     name:      val("co-name"),
     phone:     val("co-phone"),
@@ -726,6 +806,13 @@ function placeOrder(){
   btn.disabled=true; btn.textContent="Placing your order…";
 
   sendOrder(payload, function(){
+    saveOrder({
+      orderId:o_(payload,"orderId"), placedAt:payload.placedAt, placedISO:payload.placedISO,
+      name:payload.name, phone:payload.phone, area:payload.area, district:payload.district,
+      payment:payload.payment, total:payload.total, itemCount:payload.itemCount,
+      itemList:c.map(function(i){return {name:i.name,price:i.price,qty:i.qty}}),
+      status:"NEW"
+    });
     showConfirmation(payload);
     localStorage.removeItem("jm_cart");
     paintCartCount();
@@ -790,12 +877,195 @@ function showConfirmation(o){
       '</div>'+
       '<p class="okbox__note">'+payLine+' We\'ll call or WhatsApp <b>'+o.phone+'</b> to confirm the delivery date — usually within a few hours.</p>'+
       '<div class="okbox__acts">'+
-        '<a class="btn btn-gold" href="shop.html">Keep shopping</a>'+
+        '<a class="btn btn-gold" href="orders.html">Track this order</a>'+
+        '<a class="btn btn-ghost" href="shop.html">Keep shopping</a>'+
         '<a class="btn btn-ghost" target="_blank" rel="noopener" href="'+waLink("Hi "+CONFIG.brand+"! About my order "+o.orderId+" — ")+'">Message us about this order</a>'+
       '</div>'+
-      '<p class="okbox__small">Save your Order ID. Screenshot this page if you like.</p>'+
+      '<p class="okbox__small">Saved to <a href="orders.html" style="color:var(--gold-2);font-weight:700">My orders</a> on this device. '+
+        'You can cancel it yourself there for the next '+CONFIG.cancelHours+' hours.</p>'+
     '</div>';
   window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =====================================================================
+   MY ORDERS  (orders.html)
+   Every order is kept on the customer's own device so they can see it
+   again, and the live status is fetched from your sheet when possible.
+   ===================================================================== */
+function getOrders(){ try{return JSON.parse(localStorage.getItem("jm_orders"))||[]}catch(e){return[]} }
+function saveOrder(o){
+  var all=getOrders();
+  all.unshift(o);
+  localStorage.setItem("jm_orders",JSON.stringify(all.slice(0,40)));
+}
+function updateOrder(id,patch){
+  var all=getOrders();
+  all.forEach(function(o){ if(o.orderId===id) Object.keys(patch).forEach(function(k){o[k]=patch[k]}); });
+  localStorage.setItem("jm_orders",JSON.stringify(all));
+}
+function hoursSince(iso){ return (Date.now()-new Date(iso).getTime())/36e5; }
+function canCancel(o){
+  var s=(o.status||"NEW").toUpperCase();
+  if(s.indexOf("CANCEL")>-1||s.indexOf("SHIPPED")>-1||s.indexOf("DONE")>-1||s.indexOf("DELIVERED")>-1) return false;
+  return hoursSince(o.placedISO) < CONFIG.cancelHours;
+}
+function cancelWindowLeft(o){
+  var left=CONFIG.cancelHours-hoursSince(o.placedISO);
+  if(left<=0) return "";
+  var mins=Math.round(left*60);
+  if(mins<60){
+    mins=Math.max(1,mins);
+    return mins+(mins===1?" minute":" minutes")+" left to cancel";
+  }
+  return Math.floor(mins/60)+"h "+(mins%60)+"m left to cancel";
+}
+
+/* Talks to Apps Script without CORS trouble by loading it as a script tag. */
+function jsonp(params,cb){
+  if(!ORDER_ENDPOINT){ cb(null); return; }
+  var name="jmcb_"+Math.random().toString(36).slice(2);
+  var done=false;
+  var s=document.createElement("script");
+  function finish(data){ if(done)return; done=true; try{delete window[name]}catch(e){window[name]=null} if(s.parentNode)s.parentNode.removeChild(s); cb(data); }
+  window[name]=finish;
+  var q=Object.keys(params).map(function(k){return k+"="+encodeURIComponent(params[k])}).join("&");
+  s.src=ORDER_ENDPOINT+"?"+q+"&callback="+name;
+  s.onerror=function(){ finish(null) };
+  document.body.appendChild(s);
+  setTimeout(function(){ finish(null) },9000);
+}
+
+function statusClass(s){
+  s=(s||"NEW").toUpperCase();
+  if(s.indexOf("CANCEL")>-1)   return "st-cancel";
+  if(s.indexOf("DELIVER")>-1||s.indexOf("DONE")>-1) return "st-done";
+  if(s.indexOf("SHIP")>-1)     return "st-ship";
+  if(s.indexOf("PRINT")>-1||s.indexOf("MAKING")>-1) return "st-making";
+  if(s.indexOf("CONFIRM")>-1)  return "st-confirm";
+  return "st-new";
+}
+var STATUS_STEPS=["NEW","CONFIRMED","PRINTING","SHIPPED","DELIVERED"];
+function statusIndex(s){
+  s=(s||"NEW").toUpperCase();
+  if(s.indexOf("CANCEL")>-1) return -1;
+  if(s.indexOf("DELIVER")>-1||s.indexOf("DONE")>-1) return 4;
+  if(s.indexOf("SHIP")>-1) return 3;
+  if(s.indexOf("PRINT")>-1||s.indexOf("MAKING")>-1) return 2;
+  if(s.indexOf("CONFIRM")>-1) return 1;
+  return 0;
+}
+function orderCard(o){
+  var st=o.status||"NEW";
+  var idx=statusIndex(st);
+  var track = idx<0 ? '<div class="ocancel">This order was cancelled.</div>'
+    : '<div class="track">'+STATUS_STEPS.map(function(lbl,i){
+        return '<div class="track__s'+(i<=idx?" on":"")+'"><span class="track__d"></span><em>'+
+          lbl.charAt(0)+lbl.slice(1).toLowerCase()+'</em></div>';
+      }).join("")+'</div>';
+  var items=(o.itemList||[]).map(function(i){
+    var p=findProduct(i.name);
+    return '<div class="oitem">'+(p?'<img src="'+p.img+'" alt="">':'')+
+      '<div><b>'+i.name+'</b><span>'+i.price+'৳ × '+i.qty+'</span></div>'+
+      '<i>'+(i.price*i.qty)+'৳</i></div>';
+  }).join("");
+  var cancelBtn="";
+  if(canCancel(o)){
+    cancelBtn='<div class="ocancelbox"><button class="btn btn-ghost btn-sm" data-cancel="'+o.orderId+'">Cancel this order</button>'+
+      '<span class="olen">'+cancelWindowLeft(o)+'</span></div>';
+  } else if(idx>=0 && hoursSince(o.placedISO)>=CONFIG.cancelHours){
+    cancelBtn='<div class="ocancelbox"><span class="olen">The '+CONFIG.cancelHours+'-hour cancellation window has closed — '+
+      '<a href="'+waLink("Hi "+CONFIG.brand+"! About order "+o.orderId+" — ")+'" target="_blank" rel="noopener">message us</a> if you need to change it.</span></div>';
+  }
+  return '<article class="ocard" id="oc-'+o.orderId+'">'+
+    '<div class="ocard__top"><div><span class="oid">'+o.orderId+'</span>'+
+      '<span class="odate">'+o.placedAt+'</span></div>'+
+      '<span class="ostatus '+statusClass(st)+'">'+st+'</span></div>'+
+    track+
+    '<div class="oitems">'+items+'</div>'+
+    '<div class="ototals"><span>'+o.itemCount+' item'+(o.itemCount==1?"":"s")+' · '+o.payment+'</span><b>'+o.total+'৳</b></div>'+
+    '<div class="oaddr">Delivering to '+o.name+' · '+o.area+', '+o.district+'</div>'+
+    cancelBtn+
+  '</article>';
+}
+function paintOrders(){
+  var wrap=document.getElementById("ordersList"); if(!wrap)return;
+  var all=getOrders();
+  if(!all.length){
+    wrap.innerHTML='<div class="okbox" style="margin-top:0">'+
+      '<h3>No orders on this device yet</h3>'+
+      '<p>Orders you place are saved here automatically so you can check on them any time.</p>'+
+      '<p style="font-family:var(--tech);font-size:13.5px;color:var(--muted);margin-top:10px">'+
+      'Ordered from a different phone or browser? Use the lookup box below.</p>'+
+      '<a class="btn btn-gold" href="shop.html" style="margin-top:18px">Go to the shop</a></div>';
+    return;
+  }
+  wrap.innerHTML=all.map(orderCard).join("");
+  refreshStatuses(all);
+}
+/* ask the sheet what the real status is now */
+function refreshStatuses(all){
+  if(!ORDER_ENDPOINT)return;
+  all.slice(0,10).forEach(function(o){
+    if(statusIndex(o.status)>=4||statusIndex(o.status)<0) return; // finished, no need
+    jsonp({action:"status",orderId:o.orderId,phone:o.phone},function(r){
+      if(r&&r.ok&&r.status&&r.status!==o.status){
+        updateOrder(o.orderId,{status:r.status});
+        var card=document.getElementById("oc-"+o.orderId);
+        if(card){
+          var fresh=getOrders().filter(function(x){return x.orderId===o.orderId})[0];
+          if(fresh) card.outerHTML=orderCard(fresh);
+        }
+      }
+    });
+  });
+}
+function doCancel(id){
+  var o=getOrders().filter(function(x){return x.orderId===id})[0];
+  if(!o)return;
+  if(!canCancel(o)){ toast("This order can no longer be cancelled here."); paintOrders(); return; }
+  if(!confirm("Cancel order "+id+"?\n\nThis cannot be undone. If you just want to change something, message us instead."))return;
+
+  var btn=document.querySelector('[data-cancel="'+id+'"]');
+  if(btn){ btn.disabled=true; btn.textContent="Cancelling…"; }
+
+  jsonp({action:"cancel",orderId:id,phone:o.phone},function(r){
+    if(r&&r.ok){
+      updateOrder(id,{status:"CANCELLED BY CUSTOMER"});
+      toast("Order "+id+" cancelled.");
+    }else{
+      updateOrder(id,{status:"CANCELLED BY CUSTOMER"});
+      toast("Cancellation saved. We'll confirm it with you shortly.");
+      window.open(waLink("Hi "+CONFIG.brand+"! Please cancel my order "+id+" ("+o.name+", "+o.phone+")."),"_blank");
+    }
+    paintOrders();
+  });
+}
+function initOrders(){
+  var wrap=document.getElementById("ordersList"); if(!wrap)return;
+  paintOrders();
+
+  document.addEventListener("click",function(e){
+    var b=e.target.closest("[data-cancel]");
+    if(b) doCancel(b.getAttribute("data-cancel"));
+  });
+
+  var find=document.getElementById("lookupBtn");
+  if(find) find.addEventListener("click",function(){
+    var id=val("lk-id").toUpperCase(), ph=val("lk-phone");
+    var out=document.getElementById("lookupResult");
+    if(!id||!ph){ toast("Enter both your Order ID and phone number."); return; }
+    if(!ORDER_ENDPOINT){ out.innerHTML='<div class="lkmsg">Order lookup isn\'t switched on yet — please message us and we\'ll check for you.</div>'; return; }
+    out.innerHTML='<div class="lkmsg">Looking…</div>';
+    jsonp({action:"status",orderId:id,phone:ph},function(r){
+      if(r&&r.ok&&r.status){
+        out.innerHTML='<div class="lkmsg ok"><b>'+id+'</b> — status: <b>'+r.status+'</b>'+
+          (r.total?('<br>Total '+r.total+'৳ · '+(r.items||"")):"")+'</div>';
+      }else{
+        out.innerHTML='<div class="lkmsg">We couldn\'t find an order with that ID and phone number. '+
+          'Check both, or <a href="'+waLink("Hi "+CONFIG.brand+"! I'm trying to track order "+id)+'" target="_blank" rel="noopener">message us</a>.</div>';
+      }
+    });
+  });
 }
 
 /* ---------- quote form (custom.html) ---------- */
@@ -843,7 +1113,9 @@ function initQuoteForm(){
 /* ---------- contact form ---------- */
 function initContactForm(){
   var f=document.getElementById("contactForm");if(!f)return;
-  document.getElementById("contactSend").addEventListener("click",function(){
+  var send=document.getElementById("contactSend");
+  if(!send)return;
+  send.addEventListener("click",function(){
     var g=function(id){var el=document.getElementById(id);return el?el.value.trim():"";};
     if(!g("ct-name")||!g("ct-msg")){toast("Please add your name and a message.");return;}
     window.open(waLink("Hi "+CONFIG.brand+"!\n\nName: "+g("ct-name")+"\nPhone: "+g("ct-phone")+"\n\n"+g("ct-msg")),"_blank");
@@ -933,5 +1205,6 @@ document.addEventListener("DOMContentLoaded",function(){
   initQuoteForm();
   initContactForm();
   initCheckout();
+  initOrders();
   initBot();
 });

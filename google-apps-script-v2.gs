@@ -20,8 +20,8 @@ var SHEET_ID = "";
 var NOTIFY_EMAIL = "jontormontor.official@gmail.com";
 
 // ▼ How many hours a customer may cancel their own order.
-//   Must match cancelHours in app.js.
-var CANCEL_HOURS = 6;
+//   MUST match cancelHours in js/app.js or the two will disagree.
+var CANCEL_HOURS = 1;
 
 var SHEET_NAME = "Orders";
 
@@ -34,7 +34,32 @@ var HEADERS = [
   "Notes", "Source"
 ];
 
+/* Default column positions. These are only a fallback — the script
+   actually finds each column by its header name, so inserting or
+   reordering columns in the sheet will not break anything. */
 var COL = { placedAt:1, orderId:2, status:3, name:4, phone:5, items:15, total:19 };
+
+/** Locate each column by reading the header row. */
+function cols_(sheet) {
+  var width = Math.max(sheet.getLastColumn(), HEADERS.length);
+  var head = sheet.getRange(1, 1, 1, width).getValues()[0];
+  function find(label, fallback) {
+    for (var i = 0; i < head.length; i++) {
+      if (String(head[i]).trim().toLowerCase() === label.toLowerCase()) return i + 1;
+    }
+    return fallback;
+  }
+  return {
+    placedAt: find("Placed at", COL.placedAt),
+    orderId:  find("Order ID",  COL.orderId),
+    status:   find("Status",    COL.status),
+    name:     find("Name",      COL.name),
+    phone:    find("Phone",     COL.phone),
+    items:    find("Items",     COL.items),
+    total:    find("Total",     COL.total),
+    width:    width
+  };
+}
 
 /* ================= receiving an order ================= */
 
@@ -81,7 +106,8 @@ function doGet(e) {
       ok: true,
       connectedTo: sheet.getParent().getName() + " > " + sheet.getName(),
       orders: Math.max(0, sheet.getLastRow() - 1),
-      message: "Endpoint is live. Add ?test=1 to write a test row."
+      cancelHours: CANCEL_HOURS,
+      message: "Endpoint is live. If you can see version v2 above, the new script IS deployed."
     }, cb);
 
   } catch (err) {
@@ -95,14 +121,15 @@ function lookup_(orderId, phone) {
   var row = findRow_(orderId, phone);
   if (!row) return { ok: false, reason: "not_found" };
   var sheet = getSheet_();
-  var v = sheet.getRange(row, 1, 1, HEADERS.length).getValues()[0];
+  var C = cols_(sheet);
+  var v = sheet.getRange(row, 1, 1, C.width).getValues()[0];
   return {
     ok: true,
-    orderId: v[COL.orderId - 1],
-    status:  String(v[COL.status - 1] || "NEW"),
-    items:   v[COL.items - 1],
-    total:   v[COL.total - 1],
-    placedAt: String(v[COL.placedAt - 1])
+    orderId: v[C.orderId - 1],
+    status:  String(v[C.status - 1] || "NEW").trim(),
+    items:   v[C.items - 1],
+    total:   v[C.total - 1],
+    placedAt: String(v[C.placedAt - 1])
   };
 }
 
@@ -115,23 +142,24 @@ function cancel_(orderId, phone) {
     if (!row) return { ok: false, reason: "not_found" };
 
     var sheet = getSheet_();
-    var current = String(sheet.getRange(row, COL.status).getValue() || "NEW").toUpperCase();
+    var C = cols_(sheet);
+    var current = String(sheet.getRange(row, C.status).getValue() || "NEW").toUpperCase();
 
     if (current.indexOf("CANCEL") > -1) return { ok: true, status: "CANCELLED BY CUSTOMER", already: true };
     if (current.indexOf("SHIP") > -1 || current.indexOf("DELIVER") > -1 || current.indexOf("DONE") > -1) {
       return { ok: false, reason: "too_late_stage", status: current };
     }
 
-    var placed = new Date(sheet.getRange(row, COL.placedAt).getValue());
+    var placed = new Date(sheet.getRange(row, C.placedAt).getValue());
     if (!isNaN(placed.getTime())) {
       var hrs = (Date.now() - placed.getTime()) / 36e5;
       if (hrs > CANCEL_HOURS) return { ok: false, reason: "window_closed", status: current };
     }
 
-    sheet.getRange(row, COL.status).setValue("CANCELLED BY CUSTOMER");
-    sheet.getRange(row, 1, 1, HEADERS.length).setBackground("#fee2e2");
+    sheet.getRange(row, C.status).setValue("CANCELLED BY CUSTOMER");
+    sheet.getRange(row, 1, 1, C.width).setBackground("#fee2e2");
 
-    notifyCancel_(sheet.getRange(row, 1, 1, HEADERS.length).getValues()[0]);
+    notifyCancel_(sheet.getRange(row, 1, 1, C.width).getValues()[0], C);
     return { ok: true, status: "CANCELLED BY CUSTOMER" };
   } finally {
     lock.releaseLock();
@@ -146,14 +174,15 @@ function findRow_(orderId, phone) {
   var last = sheet.getLastRow();
   if (last < 2) return 0;
 
+  var C = cols_(sheet);
   var want = String(orderId).trim().toUpperCase();
   var tail = String(phone).replace(/\D/g, "").slice(-6);
   if (tail.length < 6) return 0;
 
-  var data = sheet.getRange(2, 1, last - 1, HEADERS.length).getValues();
+  var data = sheet.getRange(2, 1, last - 1, C.width).getValues();
   for (var i = 0; i < data.length; i++) {
-    var id = String(data[i][COL.orderId - 1] || "").trim().toUpperCase();
-    var ph = String(data[i][COL.phone - 1] || "").replace(/\D/g, "");
+    var id = String(data[i][C.orderId - 1] || "").trim().toUpperCase();
+    var ph = String(data[i][C.phone - 1] || "").replace(/\D/g, "");
     if (id === want && ph.slice(-6) === tail) return i + 2;
   }
   return 0;
@@ -238,19 +267,20 @@ function notifyNew_(p) {
   } catch (err) { /* never let a mail failure lose the row */ }
 }
 
-function notifyCancel_(v) {
+function notifyCancel_(v, C) {
   if (!NOTIFY_EMAIL) return;
+  C = C || COL;
   try {
     MailApp.sendEmail({
       to: NOTIFY_EMAIL,
-      subject: "CANCELLED by customer — " + v[COL.orderId - 1] + " — " + v[COL.total - 1] + " BDT",
+      subject: "CANCELLED by customer — " + v[C.orderId - 1] + " — " + v[C.total - 1] + " BDT",
       body:
         "The customer cancelled this order from the website.\n\n" +
-        "Order: " + v[COL.orderId - 1] + "\n" +
-        "Placed: " + v[COL.placedAt - 1] + "\n" +
-        "Customer: " + v[COL.name - 1] + " · " + v[COL.phone - 1] + "\n" +
-        "Items: " + v[COL.items - 1] + "\n" +
-        "Total: " + v[COL.total - 1] + " BDT\n\n" +
+        "Order: " + v[C.orderId - 1] + "\n" +
+        "Placed: " + v[C.placedAt - 1] + "\n" +
+        "Customer: " + v[C.name - 1] + " · " + v[C.phone - 1] + "\n" +
+        "Items: " + v[C.items - 1] + "\n" +
+        "Total: " + v[C.total - 1] + " BDT\n\n" +
         "The row is now marked CANCELLED BY CUSTOMER and highlighted red.\n" +
         "If you had already started printing, call them."
     });
@@ -261,7 +291,10 @@ function notifyCancel_(v) {
 
 /** Plain JSON for POSTs; JavaScript wrapped in a callback for the website,
  *  which is how the browser reads a reply from Apps Script without CORS. */
+var SCRIPT_VERSION = "v2";
+
 function json_(obj, callback) {
+  if (obj && typeof obj === "object") obj.version = SCRIPT_VERSION;
   var text = JSON.stringify(obj);
   if (callback) {
     return ContentService
@@ -271,10 +304,69 @@ function json_(obj, callback) {
   return ContentService.createTextOutput(text).setMimeType(ContentService.MimeType.JSON);
 }
 
+
+/* ================= one-click sheet setup ================= */
+
+/**
+ * Run this ONCE from the editor (pick setupStatusDropdown, press Run).
+ * It puts a proper dropdown on the whole Status column and colours each
+ * stage, so you can never mistype a status again.
+ */
+function setupStatusDropdown() {
+  var sheet = getSheet_();
+  var options = ["NEW", "CONFIRMED", "PRINTING", "SHIPPED", "DELIVERED",
+                 "CANCELLED BY CUSTOMER", "CANCELLED BY US"];
+
+  var range = sheet.getRange(2, cols_(sheet).status, Math.max(sheet.getMaxRows() - 1, 500), 1);
+  var rule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(options, true)
+    .setAllowInvalid(true)     // typing still works, you just get a warning
+    .setHelpText("Pick a stage. The customer's tracking page follows this.")
+    .build();
+  range.setDataValidation(rule);
+
+  var colours = {
+    "NEW": "#fff7d6", "CONFIRMED": "#e3f0e6", "PRINTING": "#dbeafe",
+    "SHIPPED": "#dcfce7", "DELIVERED": "#bbf7d0",
+    "CANCELLED BY CUSTOMER": "#fee2e2", "CANCELLED BY US": "#fee2e2"
+  };
+  var rules = [];
+  Object.keys(colours).forEach(function (k) {
+    rules.push(SpreadsheetApp.newConditionalFormatRule()
+      .whenTextEqualTo(k)
+      .setBackground(colours[k])
+      .setRanges([range])
+      .build());
+  });
+  sheet.setConditionalFormatRules(rules);
+
+  Logger.log("Done. The Status column now has a dropdown with: " + options.join(", "));
+}
+
+/**
+ * Run this to check a real order the way the website does.
+ * Edit the two values first, then press Run and read the log.
+ */
+function testLookup() {
+  var ORDER_ID = "JM-000000-XXXX";   // <- paste a real Order ID from the sheet
+  var PHONE    = "01700000000";      // <- and that customer's phone
+
+  var found = findRow_(ORDER_ID, PHONE);
+  if (!found) {
+    Logger.log("NOT FOUND. Check the Order ID and phone match a row exactly.");
+    return;
+  }
+  Logger.log("Found on row " + found);
+  Logger.log(JSON.stringify(lookup_(ORDER_ID, PHONE)));
+}
+
 /* ================= run this from the editor to check setup ============ */
 
 function testSetup() {
   var sheet = getSheet_();
+  Logger.log("Script version: " + SCRIPT_VERSION);
   Logger.log("Connected to: " + sheet.getParent().getName() + " > " + sheet.getName());
   Logger.log("Orders so far: " + Math.max(0, sheet.getLastRow() - 1));
+  Logger.log("Status column detected at column " + cols_(sheet).status);
+  Logger.log("Cancellation window: " + CANCEL_HOURS + " hour(s)");
 }

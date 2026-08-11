@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.jontormontor.com/sitemap.xml
+Sitemap: https://jontor-montor.pages.dev/sitemap.xml

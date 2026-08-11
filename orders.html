@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My orders — Jontor Montor</title>
+<meta name="description" content="Track your Jontor Montor order — see what you ordered, check its progress, or cancel it within 6 hours.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/jpeg" href="images/logo.jpg">
+<meta name="theme-color" content="#0a3a1c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Space+Grotesk:wght@400;500;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section class="subhero dots-bg" style="padding-bottom:12px">
+  <div class="wrap">
+    <span class="eyebrow">Order tracking</span>
+    <h1>My <span class="y">orders</span></h1>
+    <p>Everything you've ordered from this device, with its current progress. You can cancel an order yourself within 6 hours of placing it.</p>
+  </div>
+</section>
+
+<section class="page band-white">
+  <div class="wrap">
+    <div id="ordersList"></div>
+
+    <div class="lookup">
+      <h3>Ordered from a different phone or browser?</h3>
+      <p>Your orders are saved on the device you ordered from. To check one from anywhere, enter the Order ID from your confirmation along with the phone number you gave us.</p>
+      <div class="form form__row">
+        <div class="field"><label>Order ID</label>
+          <input id="lk-id" placeholder="e.g. JM-260810-A4K2"></div>
+        <div class="field"><label>Phone number used</label>
+          <input id="lk-phone" type="tel" inputmode="numeric" placeholder="01XXXXXXXXX"></div>
+      </div>
+      <button class="btn btn-gold btn-sm" id="lookupBtn" type="button">Find my order</button>
+      <div id="lookupResult"></div>
+    </div>
+
+    <div class="ohelp">
+      <h4>What the stages mean</h4>
+      <ul>
+        <li><b>New</b> — we've got your order and will confirm it shortly, usually within a few hours.</li>
+        <li><b>Confirmed</b> — details checked, payment verified if you paid in advance.</li>
+        <li><b>Printing</b> — your piece is on the machine, or being finished and painted.</li>
+        <li><b>Shipped</b> — handed to the courier or out for delivery.</li>
+        <li><b>Delivered</b> — done. Thank you.</li>
+      </ul>
+      <p>Something wrong, or need to change an address after the cancellation window? Message us — we'd much rather fix it than have you stuck.</p>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<a class="wa" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="WhatsApp us">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 01-1.9-1.2 7.2 7.2 0 01-1.3-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1s.2-1 .2-1.1-.2-.2-.4-.3z"/></svg>
+</a>
+<script src="js/app.js"></script>
+</body>
+</html>

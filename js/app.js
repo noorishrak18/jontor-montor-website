@@ -13,7 +13,7 @@
    │  hide or delete a product            TASK: HIDE              │
    │  change delivery charges             TASK: DELIVERY          │
    │  change the bKash number             TASK: BKASH             │
-   │  change the cancellation window      TASK: CANCEL WINDOW     │
+   │  turn customer cancelling on/off     TASK: CANCEL WINDOW     │
    │  change what's on the homepage       TASK: HOMEPAGE          │
    │  turn the yellow top strip back on   TASK: TOP STRIP         │
    │  see the list of valid categories    TASK: CATEGORY LIST     │
@@ -68,9 +68,11 @@ var CONFIG = {
   nagadNumber: "01601333064",
 
   /* ---- TASK: CANCEL WINDOW ----
-     How many hours a customer may cancel their own order.
-     If you change this, change CANCEL_HOURS in the Apps Script too
-     or the two will disagree. */
+     Customer self-cancel is switched OFF (cancelOn: false). Customers
+     can still track their order and message you to change anything.
+     To bring the Cancel button back: set cancelOn to true and make
+     CANCEL_HOURS in the Apps Script match cancelHours below. */
+  cancelOn:    false,
   cancelHours: 1
 };
 
@@ -1012,7 +1014,7 @@ function showConfirmation(o){
         '<a class="btn btn-ghost" target="_blank" rel="noopener" href="'+waLink("Hi "+CONFIG.brand+"! About my order "+o.orderId+" — ")+'">Message us about this order</a>'+
       '</div>'+
       '<p class="okbox__small">Saved to <a href="orders.html" style="color:var(--gold-2);font-weight:700">My orders</a> on this device. '+
-        'You can cancel it yourself there for the next '+CONFIG.cancelHours+' hours.</p>'+
+        (CONFIG.cancelOn ? 'You can cancel it yourself there for the next '+CONFIG.cancelHours+(CONFIG.cancelHours==1?' hour.':' hours.') : 'Check its progress there any time.')+'</p>'+
     '</div>';
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -1035,6 +1037,7 @@ function updateOrder(id,patch){
 }
 function hoursSince(iso){ return (Date.now()-new Date(iso).getTime())/36e5; }
 function canCancel(o){
+  if(!CONFIG.cancelOn) return false;
   var s=(o.status||"NEW").toUpperCase();
   if(s.indexOf("CANCEL")>-1||s.indexOf("SHIPPED")>-1||s.indexOf("DONE")>-1||s.indexOf("DELIVERED")>-1) return false;
   return hoursSince(o.placedISO) < CONFIG.cancelHours;
@@ -1114,7 +1117,10 @@ function orderCard(o){
   if(canCancel(o)){
     cancelBtn='<div class="ocancelbox"><button class="btn btn-ghost btn-sm" data-cancel="'+o.orderId+'">Cancel this order</button>'+
       '<span class="olen">'+cancelWindowLeft(o)+'</span></div>';
-  } else if(idx>=0 && hoursSince(o.placedISO)>=CONFIG.cancelHours){
+  } else if(!CONFIG.cancelOn && idx>=0 && idx<3){
+    cancelBtn='<div class="ocancelbox"><span class="olen">Need to change something? '+
+      '<a href="'+waLink("Hi "+CONFIG.brand+"! About order "+o.orderId+" — ")+'" target="_blank" rel="noopener">Message us</a> and we\'ll sort it out.</span></div>';
+  } else if(CONFIG.cancelOn && idx>=0 && hoursSince(o.placedISO)>=CONFIG.cancelHours){
     cancelBtn='<div class="ocancelbox"><span class="olen">The '+CONFIG.cancelHours+'-hour cancellation window has closed — '+
       '<a href="'+waLink("Hi "+CONFIG.brand+"! About order "+o.orderId+" — ")+'" target="_blank" rel="noopener">message us</a> if you need to change it.</span></div>';
   }

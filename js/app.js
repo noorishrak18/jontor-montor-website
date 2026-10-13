@@ -8,6 +8,7 @@
    │  change a price                      TASK: PRICE             │
    │  replace a product photo             TASK: PHOTO             │
    │  add extra photos to a product       TASK: MORE PHOTOS       │
+   │  give a product choices (sizes...)   TASK: OPTIONS           │
    │  move a product to another category  TASK: MOVE CATEGORY     │
    │  add a brand new product             TASK: NEW PRODUCT       │
    │  hide or delete a product            TASK: HIDE              │
@@ -140,7 +141,7 @@ var FAQ = [
         "Anime"            "Harry Potter"      "Marvel & DC"
         "Star Wars"        "Movies & TV"       "Gaming"
         "Sci-Fi"           "Amigurumi"         "Bangladesh"
-        "Home decor"       "Flexi"
+        "Sports"           "Home decor"        "Flexi"
      (the last two have no tile yet — they show under All products)
 
    type: must be exactly one of
@@ -222,63 +223,189 @@ var FAQ = [
 
    Required: name, fandom, type, badge, now, img.
    The rest are optional and can be left out entirely.
+
+   ------------------------------------------------------------------
+   TASK: OPTIONS — sizes, colours, characters or sets
+   ------------------------------------------------------------------
+   Add an options: list when one product comes in several versions.
+   Each option has its own label and price (was: is optional):
+
+        options:[{label:"Katana only",     now:"1999", was:"2499"},
+                 {label:"Katana + sheath", now:"2999", was:"3499"}],
+
+   The shop card then shows "from" the cheapest option and its button
+   says Choose. The customer picks an option on the details page and
+   the cart line reads "Product name — Option label".
+   With options, the product's own now:/was: are filled in for you.
    ===================================================================== */
 
 var PRODUCTS = [
- {name:"Zenitsu Nichirin Katana", sub:"Anime · Demon Slayer", fandom:"Anime", type:"Katana", badge:"stock", now:"1899", was:"2399", img:"images/katana-zenitsu.jpg",
+ /* ---------------- ANIME ---------------- */
+ {name:"Zenitsu Nichirin Katana", sub:"Anime · Demon Slayer", fandom:"Anime", type:"Katana", badge:"stock", now:"1999", was:"2499", img:"images/katana-zenitsu.jpg",
   imgs:["images/katana-zenitsu.jpg","images/hero-zenitsu.jpg"],
-  desc:"Agatsuma Zenitsu's lightning-pattern Nichirin blade, printed in sections and bonded into a near-seamless full-length katana. Comes with a display stand. Hand-finished and painted to match the anime's yellow-white lightning motif.",
-  specs:["Roughly 100 cm assembled","Display stand included","PLA+ · hand-painted finish","Display piece — not a real blade"]},
+  options:[{label:"Katana only",                       now:"1999", was:"2499"},
+           {label:"Katana + sheath",                   now:"2999", was:"3499"},
+           {label:"Full set: katana, sheath and stand", now:"3999", was:"4499"}],
+  desc:"Zenitsu Agatsuma's Thunder Breathing blade at real-life katana size. Take the katana on its own, add the sheath or get the full set with a display stand.",
+  specs:["Over 100 cm long — real katana size","Katana only, with sheath or the full set with stand","Display piece — not a real blade"]},
 
- {name:"Shinobu Nichirin Katana", sub:"Anime · Demon Slayer", fandom:"Anime", type:"Katana", badge:"stock", now:"1899", was:"2399", img:"images/katana-shinobu.jpg",
-  desc:"Kocho Shinobu's distinctive thin needle-point Nichirin blade with the butterfly guard. Printed in sections, bonded, sanded and painted in her signature lavender-to-white gradient. Display stand included.",
-  specs:["Roughly 100 cm assembled","Butterfly tsuba detail","PLA+ · hand-painted finish","Display piece — not a real blade"]},
+ {name:"Shinobu Nichirin Katana", sub:"Anime · Demon Slayer", fandom:"Anime", type:"Katana", badge:"stock", now:"1999", was:"2499", img:"images/katana-shinobu.jpg",
+  options:[{label:"Katana only",                       now:"1999", was:"2499"},
+           {label:"Katana + sheath",                   now:"2999", was:"3499"},
+           {label:"Full set: katana, sheath and stand", now:"3999", was:"4499"}],
+  desc:"Shinobu Kocho's Insect Breathing blade — the slim needle-point Nichirin sword with the butterfly guard. A graceful, venomous sting hidden in elegance.",
+  specs:["Over 100 cm long — real katana size","Katana only, with sheath or the full set with stand","Display piece — not a real blade"]},
 
- {name:"Wado Ichimonji Katana", sub:"Anime · One Piece", fandom:"Anime", type:"Katana", badge:"stock", now:"1899", was:"2399", img:"images/katana-onepiece.jpg",
-  desc:"Zoro's white-sheathed Wado Ichimonji from One Piece — the Meito he carries for Kuina. Clean white saya, round guard, printed and finished for shelf or wall display. Stand included.",
-  specs:["Roughly 100 cm assembled","White saya finish","PLA+ · hand-painted finish","Display piece — not a real blade"]},
+ {name:"Sanemi Nichirin Katana", sub:"Anime · Demon Slayer", fandom:"Anime", type:"Katana", badge:"stock", now:"1999", was:"2499", img:"images/katana-sanemi.jpg",
+  options:[{label:"Katana only",                       now:"1999", was:"2499"},
+           {label:"Katana + sheath",                   now:"2999", was:"3499"},
+           {label:"Full set: katana, sheath and stand", now:"3999", was:"4499"}],
+  desc:"Wind Hashira Sanemi Shinazugawa's Wind Breathing katana — a wild, untamed sword that slices like a storm.",
+  specs:["Over 100 cm long — real katana size","Katana only, with sheath or the full set with stand","Display piece — not a real blade"]},
 
- {name:"Elder Wand replica", sub:"Harry Potter · prop", fandom:"Harry Potter", type:"Wand or prop", badge:"order", now:"1099", was:"1499", img:"images/wand-elder.jpg",
-  desc:"The Deathstick — knobbled elder wood with its distinctive segmented nodes, printed at high detail and finished with a wood-grain paint treatment. Made to order in the finish you pick.",
-  specs:["Roughly 38 cm","Fine layer height for node detail","Wood-effect hand finish","Made to order · 4–7 days"]},
+ {name:"Giyu Nichirin Katana", sub:"Anime · Demon Slayer", fandom:"Anime", type:"Katana", badge:"stock", now:"1999", was:"2499", img:"images/hero-giyu.jpg",
+  options:[{label:"Katana only",                       now:"1999", was:"2499"},
+           {label:"Katana + sheath",                   now:"2999", was:"3499"},
+           {label:"Full set: katana, sheath and stand", now:"3999", was:"4499"}],
+  desc:"Giyu Tomioka's Water Breathing katana — serene yet deadly, flowing like a relentless current.",
+  specs:["Over 100 cm long — real katana size","Katana only, with sheath or the full set with stand","Display piece — not a real blade"]},
 
- {name:"Harry Potter Wand (boxed)", sub:"Harry Potter · prop", fandom:"Harry Potter", type:"Wand or prop", badge:"order", now:"1199", was:"1599", img:"images/wand-harry.jpg",
-  desc:"Harry's holly-and-phoenix-feather wand with the ribbed handle, presented in an Ollivanders-style box — the reason this one makes such a good gift. Made to order.",
-  specs:["Roughly 35 cm","Presentation box included","Wood-effect hand finish","Made to order · 4–7 days"]},
+ {name:"Wado Ichimonji Katana", sub:"Anime · One Piece", fandom:"Anime", type:"Katana", badge:"stock", now:"1999", was:"2499", img:"images/katana-onepiece.jpg",
+  options:[{label:"Katana only",                       now:"1999", was:"2499"},
+           {label:"Katana + sheath",                   now:"2999", was:"3499"},
+           {label:"Full set: katana, sheath and stand", now:"3999", was:"4499"}],
+  desc:"Zoro's white-sheathed Wado Ichimonji from One Piece — the Meito he carries for Kuina. Clean white saya and round guard, made for shelf or wall display.",
+  specs:["Over 100 cm long — real katana size","Katana only, with sheath or the full set with stand","Display piece — not a real blade"]},
 
+ /* ---------------- HARRY POTTER ---------------- */
+ {name:"Wizard Wand (Ollivander-style box)", sub:"Harry Potter · 13 wands", fandom:"Harry Potter", type:"Wand or prop", badge:"order", now:"639", was:"", img:"images/wand-harry.jpg",
+  imgs:["images/wand-harry.jpg","images/wand-elder.jpg","images/wand-voldemort.jpg"],
+  options:[{label:"Elder Wand (Dumbledore)", now:"789"},
+           {label:"Harry Potter",            now:"739"},
+           {label:"Lord Voldemort",          now:"739"},
+           {label:"Hermione Granger",        now:"689"},
+           {label:"Ron Weasley",             now:"689"},
+           {label:"Severus Snape",           now:"689"},
+           {label:"Sirius Black",            now:"689"},
+           {label:"Luna Lovegood",           now:"689"},
+           {label:"Draco Malfoy",            now:"639"},
+           {label:"Bellatrix Lestrange",     now:"639"},
+           {label:"Lucius Malfoy",           now:"639"},
+           {label:"Ginny Weasley",           now:"639"},
+           {label:"Neville Longbottom",      now:"639"}],
+  desc:"The wand chooses the wizard. Thirteen wands from the wizarding world, each presented in a premium Ollivander-style box — the unboxing is half the gift. Muggles, kindly stay away.",
+  specs:["Ollivander-style premium box included","13 characters to choose from","Made for collectors, gifting and display"]},
+
+ /* ---------------- GAMING ---------------- */
  {name:"Kratos Headphone Stand", sub:"Gaming · God of War", fandom:"Gaming", type:"Headphone stand", badge:"stock", now:"2989", was:"3999", img:"images/kratos-stand.jpg",
   imgs:["images/kratos-stand.jpg","images/hero-kratos.jpg"],
-  desc:"Kratos in full Spartan detail, doubling as a weighted headphone stand. The shoulder and axe geometry cradle the headband so nothing slips. One of our most-requested desk pieces.",
-  specs:["Roughly 28 cm tall","Fits most over-ear headsets","Weighted base — won't tip","PLA+ · hand-painted"]},
+  desc:"The Ghost of Sparta in full fury — the red tattoo, the battle scars, the intense gaze and the white beard — holding your headphones with unbreakable strength. Spartan-level presence for any desk or gaming setup.",
+  specs:["Fits most over-ear headsets","Built for gamers and collectors","Desk or gaming-setup centrepiece"]},
 
- {name:"Spider-Man Headphone Stand", sub:"Marvel · headphone stand", fandom:"Marvel & DC", type:"Headphone stand", badge:"stock", now:"2489", was:"2999", img:"images/spiderman-stand.jpg",
-  desc:"Spider-Man mid-crawl, arm arched to hold your headset. Printed in multi-colour so the red-and-blue suit and web lines come out of the printer already detailed, then cleaned and sealed.",
-  specs:["Roughly 26 cm tall","Fits most over-ear headsets","Multi-colour print","Weighted base"]},
+ {name:"Poké Ball", sub:"Gaming · Pokémon", fandom:"Gaming", type:"Figure", badge:"stock", now:"350", was:"", img:"images/pokeball.jpg",
+  desc:"Ever dreamed of holding a real Poké Ball and starting your adventure like Ash Ketchum? A cool desk piece or gift for any trainer — let's catch 'em all.",
+  specs:["Desk or gift piece","Delivered anywhere in Bangladesh"]},
+
+ /* ---------------- MARVEL & DC ---------------- */
+ {name:"Spider-Man Headphone Stand", sub:"Marvel · headphone stand", fandom:"Marvel & DC", type:"Headphone stand", badge:"stock", now:"3379", was:"4789", img:"images/spiderman-stand.jpg",
+  imgs:["images/spiderman-stand.jpg","images/spiderman-stand-2.jpg"],
+  desc:"Spider-Man's masked head as a headphone stand that owns your desk — the web pattern is printed right into the surface. Precision 3D printed in Dhaka.",
+  specs:["Fits most over-ear headsets","Web-pattern textured finish","Launch price"]},
+
+ {name:"Spider-Man Wearable Helmet", sub:"Marvel · wearable", fandom:"Marvel & DC", type:"Cosplay mask", badge:"order", now:"3479", was:"4599", img:"images/spiderman-helmet.jpg",
+  desc:"Put it on. Become him. A wearable Spider-Man mask with mesh lenses you can actually see through — for cosplay, birthdays or shelf display.",
+  specs:["Wearable mask","See-through mesh lenses","Cosplay or display"]},
+
+ {name:"Spider-Man Web Shooter", sub:"Marvel · functional prop", fandom:"Marvel & DC", type:"Wand or prop", badge:"order", now:"1579", was:"2599", img:"images/spiderman-webshooter.jpg",
+  imgs:["images/spiderman-webshooter.jpg","images/spiderman-webshooter-2.jpg"],
+  options:[{label:"Red and white", now:"1579", was:"2599"},
+           {label:"Red and blue",  now:"1579", was:"2599"}],
+  desc:"A functional web shooter, precision 3D printed in Dhaka — no imports, no three-week waits. Two colour styles to choose from.",
+  specs:["Functional web shooter","Two colour styles","Launch price"]},
 
  {name:"Batman Cosplay Mask", sub:"DC · wearable", fandom:"Marvel & DC", type:"Cosplay mask", badge:"order", now:"1699", was:"2199", img:"images/batman-mask.jpg",
   desc:"Wearable cowl printed to a comfortable adult head size, with the interior smoothed and a matte black finish. Tell us your head circumference when you order and we scale it to fit you.",
   specs:["Scaled to your head size","Matte black finish","Padded interior on request","Made to order · 5–8 days"]},
 
- {name:"Poké Ball (openable)", sub:"Gaming · Pokémon", fandom:"Gaming", type:"Figure", badge:"stock", now:"699", was:"899", img:"images/pokeball.jpg",
-  desc:"A proper hinged Poké Ball that actually clicks open and shut — printed in red, white and black without a drop of paint, thanks to multi-colour printing. Big enough to keep small things in.",
-  specs:["Roughly 7.5 cm diameter","Hinged, opens and latches","Multi-colour print, no paint","Hollow inside"]},
+ {name:"Groot Keychain", sub:"Marvel · keychain", fandom:"Marvel & DC", type:"Keychain", badge:"stock", now:"299", was:"450", img:"images/groot-key.jpg",
+  desc:"Baby Groot as a pocket-sized keychain with a metal ring fitted through a printed loop. Tough enough to live on a set of keys rather than a shelf.",
+  specs:["Roughly 5 cm","Metal split ring included","Solid infill — won't snap","Pick your colour"]},
+
+ /* ---------------- MOVIES & TV ---------------- */
+ {name:"Demogorgon Figure", sub:"Movies & TV · Stranger Things", fandom:"Movies & TV", type:"Figure", badge:"stock", now:"379", was:"800", img:"images/demogorgon-2.jpg",
+  imgs:["images/demogorgon-2.jpg","images/demogorgon.jpg"],
+  options:[{label:"Pose I",  now:"379", was:"800"},
+           {label:"Pose II", now:"379", was:"800"}],
+  desc:"A detailed tabletop Demogorgon straight from the Upside Down — the petal face and limb texture read properly up close. Two poses for collectors who want more.",
+  specs:["Two poses to choose from","Tabletop figure on a named base","Winter sale price"]},
+
+ {name:"Stranger Things Keyring", sub:"Movies & TV · Stranger Things", fandom:"Movies & TV", type:"Keychain", badge:"stock", now:"189", was:"400", img:"images/st-keyring.jpg",
+  imgs:["images/st-keyring.jpg","images/st-keyring-demogorgon.jpg"],
+  options:[{label:"Stranger Things logo", now:"189", was:"400"},
+           {label:"Demogorgon mouth",     now:"189", was:"400"}],
+  desc:"Carry the mystery of Hawkins wherever you go. Pick the classic Stranger Things logo or the bold Demogorgon mouth.",
+  specs:["Two designs","Metal key ring included","Winter sale price"]},
+
+ {name:"Vecna Bust", sub:"Movies & TV · Stranger Things", fandom:"Movies & TV", type:"Bust", badge:"order", now:"339", was:"700", img:"images/vecna-bust-black.jpg",
+  imgs:["images/vecna-bust-black.jpg","images/vecna-bust-white.jpg"],
+  options:[{label:"Black",          now:"339", was:"700"},
+           {label:"White",          now:"339", was:"700"},
+           {label:"Ash",            now:"579", was:"700"},
+           {label:"Silver edition", now:"579", was:"800"},
+           {label:"Red",            now:"679", was:"700"}],
+  desc:"A chilling sculpt of Hawkins' greatest threat. Five finishes — clean white, sinister black, muted ash, a premium silver edition and an intense red.",
+  specs:["Five finishes to choose from","Display bust on a round base","Winter sale price"]},
+
+ {name:"Stranger Things Wall Art", sub:"Movies & TV · Stranger Things", fandom:"Movies & TV", type:"Home decor", badge:"order", now:"239", was:"500", img:"images/st-wall-art.jpg",
+  options:[{label:"Wall Art I",  now:"239", was:"500"},
+           {label:"Wall Art II", now:"339", was:"550"}],
+  desc:"Minimal yet haunting wall décor — the bikes above, the Upside Down below. Design II is a darker variation. The photo shows Wall Art I.",
+  specs:["Two designs","Hangs flat on the wall","Winter sale price"]},
+
+ {name:"Iron Throne", sub:"Movies & TV · Game of Thrones", fandom:"Movies & TV", type:"Display", badge:"order", now:"1499", was:"2000", img:"images/iron-throne-dragon.jpg",
+  imgs:["images/iron-throne-dragon.jpg","images/iron-throne.jpg"],
+  options:[{label:"Throne only",        now:"1499", was:"2000"},
+           {label:"Throne with dragon", now:"2499", was:"3000"}],
+  desc:"The legendary seat of power, forged from the swords of fallen kings and queens. Add the dragon and the fire meets the might of the throne.",
+  specs:["With or without the dragon","Display piece on a round base","Offer price"]},
+
+ {name:"Blue French Horn", sub:"Movies & TV · How I Met Your Mother", fandom:"Movies & TV", type:"Display", badge:"order", now:"1299", was:"", img:"images/himym.jpg",
+  desc:"The Blue French Horn — a timeless symbol of love from How I Met Your Mother. Give it to your Robin or maybe your Ted. Some things are too special to just talk about.",
+  specs:["The perfect gift for HIMYM fans","Display piece"]},
 
  {name:"Squid Game Figure", sub:"Movies & TV · Squid Game", fandom:"Movies & TV", type:"Figure", badge:"order", now:"899", was:"1200", img:"images/squidgame.jpg",
   desc:"The masked guard in the green tracksuit, printed as a clean desk figure. Made to order in the mask shape you want — circle, triangle or square.",
   specs:["Roughly 15 cm tall","Pick your mask symbol","PLA · painted finish","Made to order · 4–6 days"]},
 
- {name:"Demogorgon Figure", sub:"Movies & TV · Stranger Things", fandom:"Movies & TV", type:"Figure", badge:"stock", now:"799", was:"1100", img:"images/demogorgon.jpg",
-  desc:"The petal-faced Demogorgon mid-roar. Printed at a fine layer height so the splayed face and limb texture read properly up close — this is a piece people pick up and inspect.",
-  specs:["Roughly 16 cm tall","Fine layer height for texture","PLA · painted finish","Supplied on a base"]},
+ /* ---------------- SCI-FI ---------------- */
+ {name:"Project Hail Mary Keychains", sub:"Sci-Fi · Rocky and Grace", fandom:"Sci-Fi", type:"Keychain", badge:"stock", now:"239", was:"", img:"images/phm-rocky-grace.jpg",
+  options:[{label:"Rocky",               now:"279"},
+           {label:"Grace",               now:"239"},
+           {label:"Rocky + Grace set",   now:"450"}],
+  desc:"The duo that carried humanity's last hope across the stars. Rocky is the genius engineer from Erid. Grace is the teacher who became Earth's last chance. Fist my bump.",
+  specs:["Rocky, Grace or the pair","Keychain with metal ring","Set saves 68৳"]},
 
- {name:"Rocky — Project Hail Mary", sub:"Sci-Fi · figure", fandom:"Sci-Fi", type:"Figure", badge:"stock", now:"189", was:"400", img:"images/hailmary.jpg",
-  desc:"Rocky, the five-legged Eridian engineer from Project Hail Mary. A small desk piece for the people who read the book and immediately wanted one. Fist my bump, amaze.",
-  specs:["Roughly 8 cm","Desk / shelf scale","PLA","Great low-cost gift"]},
+ /* ---------------- BANGLADESH ---------------- */
+ {name:"Moheener Ghoraguli Keyring", sub:"Bangladesh · মহীনের ঘোড়াগুলি", fandom:"Bangladesh", type:"Keychain", badge:"stock", now:"229", was:"339", img:"images/moheener-keyring.jpg",
+  desc:"A Moheener Ghoraguli themed keyring for fans of Bangla rock's most loved band. Small enough to carry every day, made to last on your keys.",
+  specs:["Metal key ring included","Bangla rock tribute","Great small gift"]},
 
- {name:"Groot Keychain", sub:"Marvel · keychain", fandom:"Marvel & DC", type:"Keychain", badge:"stock", now:"299", was:"450", img:"images/groot-key.jpg",
-  desc:"Baby Groot as a pocket-sized keychain with a metal ring fitted through a printed loop. Tough enough to live on a set of keys rather than a shelf.",
-  specs:["Roughly 5 cm","Metal split ring included","Solid infill — won't snap","Pick your colour"]},
+ /* ---------------- SPORTS ---------------- */
+ {name:"GOAT Celebration Figure", sub:"Sports · Messi", fandom:"Sports", type:"Figure", badge:"order", now:"339", was:"", img:"images/messi-figure.jpg",
+  desc:"End the GOAT debate. Messi's iconic celebration pose as a fully detailed chibi figure, ready for your desk or shelf.",
+  specs:["Chibi-style figure","Desk or shelf display","Cash on delivery across Bangladesh"]},
 
+ {name:"World Cup Trophy + Free Chibi", sub:"Sports · football", fandom:"Sports", type:"Display", badge:"order", now:"979", was:"", img:"images/wc-trophy.jpg",
+  options:[{label:"16 cm", now:"979"},
+           {label:"20 cm", now:"1279"},
+           {label:"25 cm", now:"1679"},
+           {label:"28 cm", now:"1839"},
+           {label:"30 cm", now:"2139"},
+           {label:"32 cm", now:"2439"}],
+  desc:"Hold the glory. A multicolour 3D-printed World Cup trophy — and every size comes with a FREE chibi figure of your favourite football legend. Write who you want in the order note.",
+  specs:["Six sizes from 16 cm to 32 cm","Free chibi figure with every size","Multicolour print — not hand-painted"]},
+
+ /* ---------------- FLEXI ---------------- */
  {name:"Articulated Snake (flexi)", sub:"Flexi · fidget", fandom:"Flexi", type:"Flexi / articulated", badge:"stock", now:"349", was:"500", img:"images/snake-flexi.jpg",
   desc:"Prints in one piece and comes off the bed already moving — every segment articulates, so it coils, slithers and sits over a monitor. The classic desk fidget and a genuinely good demo of what the printer can do.",
   specs:["Roughly 22 cm long","Fully articulated, no assembly","Multi-colour options","Great for kids"]}
@@ -302,19 +429,19 @@ var DECOR = [
   specs:["Display scale, roughly 22 cm","Multi-part, bonded seamless","Gloss black finish","Made to order · 6–10 days"]}
 ];
 
-/* ---- AMIGURUMI (handmade crochet) ----
+/* ---- AMIGURUMI (3D printed with a crochet-knit look) ----
    Simpler than the others: no fandom or type needed. Both are set
    automatically to "Amigurumi". You only give name, prices, img
    and desc. Extra photos work here too — add an imgs: line. */
 var AMI = [
- {name:"লক্ষ্মী প্যাঁচা · Owl", now:"239", was:"470", img:"images/ami-owl.jpg",
-  desc:"The lokkhi pyacha owl, handmade in soft yarn — a Bengali good-luck figure that sits happily on a desk or shelf. Handmade, so no two are identical."},
- {name:"সুখ পাখি · Bird", now:"319", was:"550", img:"images/ami-bird.jpg",
-  desc:"A plump little sukh pakhi in bright yarn. Soft, squeezable and small enough to sit on a monitor or a bedside table."},
- {name:"মন্টু হাতি · Elephant", now:"289", was:"570", img:"images/ami-elephant.jpg",
+ {name:"লক্ষ্মী প্যাঁচা · Owl", now:"239", was:"479", img:"images/ami-owl.jpg",
+  desc:"The lokkhi pyacha owl — a Bengali good-luck figure, 3D printed with a crochet-knit texture so it looks hand-knitted. Sits happily on a desk or shelf."},
+ {name:"সুখ পাখি · Bird", now:"319", was:"618", img:"images/ami-bird.jpg",
+  desc:"A plump little sukh pakhi with a bright knit-look finish, small enough to sit on a monitor or a bedside table."},
+ {name:"মন্টু হাতি · Elephant", now:"289", was:"579", img:"images/ami-elephant.jpg",
   desc:"Montu the elephant — round ears, stubby legs and a very smug expression. A safe gift for basically anyone."},
- {name:"সাগর ঘোড়া · Seahorse", now:"289", was:"570", img:"images/ami-seahorse.jpg",
-  desc:"A curled seahorse with a ridged back, crocheted by hand in ocean colours. One of the trickier ones to make and it shows."}
+ {name:"সাগর ঘোড়া · Seahorse", now:"289", was:"579", img:"images/ami-seahorse.jpg",
+  desc:"A curled sagor ghora seahorse with a ridged back and a knit-look finish in ocean colours. One of the trickier ones to make and it shows."}
 ];
 
 /* ---- "YOU WISHED, WE DELIVERED" row on the shop page ----
@@ -349,7 +476,7 @@ var WORKS = [
 var FEATURED_ON_HOME = [
  "Zenitsu Nichirin Katana",
  "Kratos Headphone Stand",
- "Venom Bust",
+ "Project Hail Mary Keychains",
  "লক্ষ্মী প্যাঁচা · Owl"
 ];
 
@@ -367,14 +494,26 @@ var HOME      = IS_HOME ? "" : "index.html";
 
 /* ---------- the full catalogue, assembled from the lists above ---------- */
 function amiAsProduct(a){
-  return {name:a.name, sub:"Amigurumi · handmade", fandom:"Amigurumi", type:"Amigurumi",
+  return {name:a.name, sub:"Amigurumi · 3D printed", fandom:"Amigurumi", type:"Amigurumi",
           badge:"stock", now:a.now, was:a.was, img:a.img, desc:a.desc,
-          specs:["Handmade crochet","Roughly 12–16 cm","Soft yarn, fibre filled","Colours may vary slightly"]};
+          specs:["3D printed with a crochet-knit texture","Hard, durable print — a desk piece, not a soft toy","Colours may vary slightly"]};
 }
 var CATALOG = PRODUCTS.concat(DECOR).concat(AMI.map(amiAsProduct));
+/* products with options show "from" their cheapest option */
+CATALOG.forEach(function(p){
+  if(!p.options||!p.options.length) return;
+  var lo=p.options[0];
+  p.options.forEach(function(o){ if(+o.now<+lo.now) lo=o; });
+  p.now=lo.now; p.was=lo.was||"";
+});
 function findProduct(name){
   for(var i=0;i<CATALOG.length;i++){ if(CATALOG[i].name===name) return CATALOG[i]; }
-  return null;
+  /* cart lines for options read "Product — Option" */
+  var best=null;
+  for(var j=0;j<CATALOG.length;j++){
+    if(String(name).indexOf(CATALOG[j].name+" — ")===0 && (!best||CATALOG[j].name.length>best.name.length)) best=CATALOG[j];
+  }
+  return best;
 }
 
 /* ---------- header + footer ---------- */
@@ -506,7 +645,8 @@ function closeCart(){var o=document.getElementById("cartOv"),d=document.getEleme
 function pct(now,was){if(!was)return"";var p=Math.round((1-(+now)/(+was))*100);return p>0?("-"+p+"%"):"";}
 function pcard(p){
   var badge=p.badge==="stock"?'<span class="badge b-stock">In stock</span>':'<span class="badge b-order">Made to order</span>';
-  var price='<span class="now">'+p.now+'৳</span>'+(p.was?'<span class="was">'+p.was+'৳</span><span class="off">'+pct(p.now,p.was)+'</span>':'');
+  var many=!!(p.options&&p.options.length>1);
+  var price='<span class="now">'+(many?'<small>from</small>':'')+p.now+'৳</span>'+(p.was?'<span class="was">'+p.was+'৳</span><span class="off">'+pct(p.now,p.was)+'</span>':'');
   var key=encodeURIComponent(p.name);
   return '<article class="pcard" data-open="'+key+'" role="button" tabindex="0">'+
     '<div class="pcard__media">'+badge+'<span class="ftag">'+p.fandom+'</span>'+
@@ -517,7 +657,8 @@ function pcard(p){
     '<div class="price">'+price+'</div>'+
     '<div class="pcard__acts">'+
       '<button class="btn btn-ghost btn-sm" data-open="'+key+'">Details</button>'+
-      '<button class="btn btn-gold btn-sm" data-add="'+key+'" data-price="'+p.now+'">Add to cart</button>'+
+      (many?'<button class="btn btn-gold btn-sm" data-open="'+key+'">Choose</button>'
+           :'<button class="btn btn-gold btn-sm" data-add="'+key+'" data-price="'+p.now+'">Add to cart</button>')+
     '</div></div></article>';
 }
 function fill(id,html){var el=document.getElementById(id);if(el)el.innerHTML=html;}
@@ -596,7 +737,11 @@ var GALLERY_NAV=null, GALLERY_POS=null;
 function openProduct(name){
   var p=findProduct(name); if(!p)return;
   ensurePmodal();
-  var price='<span class="now">'+p.now+'৳</span>'+(p.was?'<span class="was">'+p.was+'৳</span><span class="off">'+pct(p.now,p.was)+'</span>':'');
+  var opts=(p.options&&p.options.length)?p.options:null, sel=0;
+  function priceOf(o){ return '<span class="now">'+o.now+'৳</span>'+(o.was?'<span class="was">'+o.was+'৳</span><span class="off">'+pct(o.now,o.was)+'</span>':''); }
+  var price=priceOf(opts?opts[0]:p);
+  var optsHtml=opts?'<div class="pmodal__optlabel">Choose one</div><div class="popts" role="radiogroup" aria-label="Choose an option">'+
+    opts.map(function(o,i){ return '<button type="button" class="popt'+(i===0?' on':'')+'" data-i="'+i+'" role="radio" aria-checked="'+(i===0)+'">'+o.label+'<span>'+o.now+'৳</span></button>'; }).join('')+'</div>':'';
   var badge=p.badge==="stock"?'<span class="badge b-stock">In stock</span>':'<span class="badge b-order">Made to order</span>';
   var specs=(p.specs||[]).map(function(s){return '<li>'+s+'</li>'}).join("");
   var key=encodeURIComponent(p.name);
@@ -623,7 +768,8 @@ function openProduct(name){
       '<div class="pmodal__tags"><span>'+p.fandom+'</span><span>'+p.type+'</span></div>'+
       '<h3>'+p.name+'</h3>'+
       '<div class="pmodal__sub">'+p.sub+'</div>'+
-      '<div class="price">'+price+'</div>'+
+      '<div class="price" id="pmPrice">'+price+'</div>'+
+      optsHtml+
       '<p class="pmodal__desc">'+(p.desc||"")+'</p>'+
       (specs?'<ul class="pmodal__specs">'+specs+'</ul>':'')+
       '<div class="pmodal__qty"><span>Quantity</span>'+
@@ -641,8 +787,19 @@ function openProduct(name){
   var qEl=document.getElementById("pmQty");
   document.getElementById("pmQtyMinus").onclick=function(){ if(q>1){q--;qEl.textContent=q;} };
   document.getElementById("pmQtyPlus").onclick =function(){ if(q<20){q++;qEl.textContent=q;} };
-  document.getElementById("pmAdd").onclick=function(){ addToCart(p.name,p.now,q,true); toast("Added "+q+" × "+p.name); closeProduct(); openCart(); };
-  document.getElementById("pmBuy").onclick=function(){ addToCart(p.name,p.now,q,true); location.href="checkout.html"; };
+  if(opts){
+    [].slice.call(document.querySelectorAll("#pmodalPanel .popt")).forEach(function(b){
+      b.onclick=function(){
+        sel=+b.getAttribute("data-i");
+        [].slice.call(document.querySelectorAll("#pmodalPanel .popt")).forEach(function(x){ var on=x===b; x.classList.toggle("on",on); x.setAttribute("aria-checked",on); });
+        document.getElementById("pmPrice").innerHTML=priceOf(opts[sel]);
+      };
+    });
+  }
+  function lineName(){ return opts?(p.name+" — "+opts[sel].label):p.name; }
+  function linePrice(){ return opts?opts[sel].now:p.now; }
+  document.getElementById("pmAdd").onclick=function(){ addToCart(lineName(),linePrice(),q,true); toast("Added "+q+" × "+lineName()); closeProduct(); openCart(); };
+  document.getElementById("pmBuy").onclick=function(){ addToCart(lineName(),linePrice(),q,true); location.href="checkout.html"; };
   document.querySelector("#pmodalPanel .pmodal__x").onclick=closeProduct;
   document.getElementById("pmodal").classList.add("on");
   document.body.style.overflow="hidden";

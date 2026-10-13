@@ -142,6 +142,7 @@ section{position:relative}
 .t-scifi::before{background:linear-gradient(150deg,#0e6b6b,#062f30)}
 .t-ami::before{background:linear-gradient(150deg,#e8662a,#9a3408)}
 .t-bd::before{background:linear-gradient(150deg,#0a3a1c,#0a3a1c)}
+.t-sports::before{background:linear-gradient(150deg,#1f5fa8,#0c2c55)}
 .t-bd .flag{position:absolute;inset:0;z-index:1;background:
   radial-gradient(circle at 38% 50%,var(--red) 0 26%,transparent 27%)}
 .t-custom{border:1.5px dashed rgba(244,194,13,.55)}
@@ -930,3 +931,15 @@ section[id], div[id]{scroll-margin-top:96px}
 .st-pending{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
 .opending{background:#fef3c7;color:#92400e;border:1px solid #fcd34d;border-radius:11px;
   padding:12px 16px;font-family:var(--tech);font-size:13.5px;margin-bottom:18px;line-height:1.5}
+
+/* product options: sizes, colours, characters, sets */
+.pmodal__optlabel{font-family:var(--tech);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.popts{display:flex;flex-wrap:wrap;gap:8px}
+.popt{font-family:var(--tech);font-size:13px;font-weight:500;color:#3c594a;border:1px solid var(--line);
+  background:var(--forest-3);border-radius:12px;padding:8px 12px;cursor:pointer;text-align:left;
+  display:flex;flex-direction:column;gap:2px;transition:.15s}
+.popt span{font-size:12px;font-weight:700;color:var(--gold-2)}
+.popt:hover{border-color:var(--gold)}
+.popt.on{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
+.popt.on span{color:var(--ink)}
+.price .now small{font-size:.62em;font-weight:500;color:var(--muted);margin-right:4px}
